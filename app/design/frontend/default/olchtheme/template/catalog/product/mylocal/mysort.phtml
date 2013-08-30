@@ -1,0 +1,165 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+
+<?php
+function getAttribute($attributeCode){
+$product = Mage::getModel('catalog/product');
+
+$productCollection = Mage::getResourceModel('eav/entity_attribute_collection')
+   ->setEntityTypeFilter($product->getResource()->getTypeId())
+   ->addFieldToFilter('attribute_code', $attributeCode);
+
+$attribute = $productCollection->getFirstItem()->setEntity($product->getResource());
+//print_r($attribute->getData()); // print out the available attributes
+
+$options = $attribute->getSource()->getAllOptions(false);// print out attribute options
+return $options;
+}
+
+$materialOptions = getAttribute('material_season');
+$colorOptions = getAttribute('color');
+$product = Mage::getModel('catalog/product');
+$helper     = Mage::helper('catalog/category');
+$collection = $helper->getStoreCategories('name', true, false);
+//$collection->setOrder( 'position', asc );
+?>
+
+<script type="text/javascript">
+//<![CDATA[
+    var contactForm = new VarienForm('contactForm', true);
+//]]>
+
+function ajaxsort(val,attType){
+    
+    var hdnproduct = document.getElementById('hdnproduct').value;
+    var hdncolor = document.getElementById('hdncolor').value;
+    var hdnmatses = document.getElementById('hdnmatses').value;
+    var hdnprodperpage = document.getElementById('hdnprodperpage').value;
+    var hdnpgno = document.getElementById('hdnpgno').value;
+    
+    var url = '<?php echo $this->getUrl('catalog/product/sortajax'); ?>';    
+    var params = { product: hdnproduct, color: hdncolor, matses: hdnmatses, hdnppp: hdnprodperpage, hdnpgno: hdnpgno };    
+    
+    if(val.replace(/\s/g,"") == ''){   
+        alert('Invalid Request');         
+    }else{       
+        new Ajax.Request(url, {
+          method: 'post',
+          parameters: params,
+          onComplete: function(req) {          
+                if(req.responseText == 'n'){
+                    alert('Invalid Request');
+                }else{
+                    var resp = req.responseText;  
+                    var respArr = resp.split("|");
+                    $('myid').innerHTML = respArr[0];
+                    $('pagination').innerHTML = respArr[1];
+                    //alert(req.responseText);
+                }
+          }
+        });
+    }
+}
+
+</script>
+ 
+<h1>SORT BY</h1>
+<div id="sortby-opts" style="display:none;">
+<ul class="sort">
+</ul>
+</div>
+
+<div class="grey demo-container">
+<ul class="accordion"  id="accordion-2">
+<li><a href="#">Product</a>
+    <ul class="acc-inner-ul">        
+<?php
+foreach ($collection as $cat):
+    $categoryId = $cat->getEntityId();
+    $catName = $cat->getName();
+    $pCnt = Mage::getModel('catalog/category')->load($categoryId)->getProductCount();
+?>        
+<li><a href='' onclick= "return sortpanel('<?php echo $categoryId.'|'.$pCnt.'|'.$catName.'|product';?>');"><?php echo $catName; ?></a></li>
+<?php endforeach; ?>
+    </ul>
+</li>
+    
+<li><a href="#">Color</a>
+    <ul class="acc-inner-ul">        
+<?php        
+foreach($colorOptions as $key=>$valArr){
+        $colorkey = $valArr['value'];
+        $color = $valArr['label'];
+        
+        $_productCollection = Mage::getModel('catalog/product')->getCollection()
+          ->addAttributeToSelect('*')
+          ->addAttributeToFilter('visibility', 4)
+          ->addAttributeToFilter('status', 1)
+            ->addAttributeToFilter('color', $colorkey)
+          ->load();
+        
+        $pCnt = $_productCollection->count();
+?>        
+<li><a href='' onclick= "return sortpanel('<?php echo $colorkey.'|'.$pCnt.'|'.$color.'|color';?>');">
+    <?php echo $color;?></a></li>
+<?php } ?>        
+    </ul>
+</li>
+    
+<li><a href="#">Material / Season</a>
+    <ul class="acc-inner-ul">
+<?php        
+foreach($materialOptions as $key=>$valArr){
+        $matkey = $valArr['value'];
+        $material = $valArr['label'];
+        
+        $_productCollection = Mage::getModel('catalog/product')->getCollection()
+          ->addAttributeToSelect('*')
+          ->addAttributeToFilter('visibility', 4)
+          ->addAttributeToFilter('status', 1)
+            ->addAttributeToFilter('material_season', $matkey)
+          ->load();        
+        $pCnt = $_productCollection->count();
+?>        
+<li><a href='' onclick= "return sortpanel('<?php echo $matkey.'|'.$pCnt.'|'.$material.'|matses';?>');"><?php echo $material; ?></a></li>
+<?php } ?>        
+    </ul>
+</li>
+</ul>
+<input type="hidden" name="hdnproduct" id="hdnproduct" value="0">
+<input type="hidden" name="hdncolor" id="hdncolor" value="0">
+<input type="hidden" name="hdnmatses" id="hdnmatses" value="0">
+<input type="hidden" name="hdnprodperpage" id="hdnprodperpage" value="8">
+<input type="hidden" name="hdnpgno" id="hdnpgno" value="0">
+</div>  

@@ -1,0 +1,369 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<?php
+function allowedAttributes($commaStr){
+    $idArr = explode(',',$commaStr);
+    $idArr = array_unique($idArr);
+    $arr1 = array();
+    $arr2 = array();
+    for($i=0;$i<count($idArr);$i++){
+        $arr3 = array();
+        array_push($arr3,$idArr[$i]);        
+        $arr2['finset']=$arr3;
+        array_push($arr1,$arr2);
+    }    
+    return $arr1; 
+} 
+$allowedcolors = allowedAttributes('24,59');
+  //$_productCollection=$this->getLoadedProductCollection();    
+  /*$_productCollection = Mage::getModel('catalog/product')->getCollection()
+          ->addAttributeToSelect('*')
+          ->addAttributeToFilter('visibility', 4)
+          ->addAttributeToFilter('status', 1)
+          ->load();*/
+//echo '<br>****<br>'; print_r($_POST); echo '<br>****<br>';
+
+/*$_productCollection = Mage::getModel('catalog/product')->getCollection()
+          ->addAttributeToSelect('*')
+          ->addAttributeToFilter('visibility', 4)
+          ->addAttributeToFilter('status', 1)        
+          ->load();*/
+$_productCollection = Mage::getModel('catalog/product')->getCollection()
+          ->addAttributeToSelect('*')
+          ->addAttributeToFilter('visibility', 4)
+          ->addAttributeToFilter('status', 1);
+//$_productCollection->addAttributeToFilter('color',$allowedcolors);
+//$_productCollection->getSelect()->limit( 4,72 );
+$_productCollection->getSelect()->limit( 8 );
+
+          $_productCollection->load();
+    
+   $_helper = $this->helper('catalog/output');
+    //include('test.php');
+?>
+    <?php $_collectionSize = $_productCollection->count() ?>
+    <?php $_columnCount = $this->getColumnCount(); ?>
+<?php if(!$_productCollection->count()): ?>
+<p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+<?php else: ?>
+<div class="category-products" id="myid">
+    <ul class="product-catalog">
+
+    <?php $i=0; foreach ($_productCollection as $_product): ?>
+    
+    
+    
+    
+    
+    
+        <!--<?php if ($i++%$_columnCount==0): ?>
+        <ul class="products-grid">
+        <?php endif ?>
+            <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">-->
+        
+   <?php 
+   $pPrice =  trim(strip_tags($this->getPriceHtml($_product, true)));  //echo '-->'.$pPrice.'<--';    
+  
+   //echo $_helper->productAttribute($_product, $_product->getMetaDescription(), 'meta_description');
+   ?>
+        
+               <!-- <li><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
+                        
+                        <span class="hotspot" onMouseOver="tooltip.show('<h1><?php echo $this->stripTags($_product->getName(), null, true) ?></h1> <p>100% Superfine English<br>Cotton Soft Woven.<br>Handmade.</p> <p>Measures 2.5 at<br>widest poin</p><h1><?php echo $pPrice; ?></h1>');" onMouseOut="tooltip.hide();">
+                            <img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(202); ?>" width="202" height="202" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+                        </span>
+                    </a></li>-->
+
+        
+<li>
+    
+<img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(202); ?>" width="202" height="202" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+<?php //echo ($i-1)%$_columnCount; echo $i.'-'.$_columnCount; ?>
+<?php if(($i-1)%4==0): ?> <div class="on-mouse-right">
+<?php else: ?> <div class="on-mouse-left"><?php endif; ?>
+
+<div class="mouse-cont">
+<h1><?php echo $this->stripTags($_product->getName(), null, true) ?></h1>
+<p>100% Superfine English<br>Cotton Soft Woven.<br>Handmade.</p> 
+<p>Measures 2.5 at<br>widest poin</p>
+<h1><?php echo $pPrice; ?></h1>
+</div>
+</div>
+</li>                
+                
+                
+                <!--<h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></a></h2>-->
+                <?php /*if($_product->getRatingSummary()): ?>
+                <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
+                <?php endif; ?>
+                <?php echo $this->getPriceHtml($_product, true) ?>
+                <div class="actions">
+                    <?php if($_product->isSaleable()): ?>
+                        <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                    <?php else: ?>
+                        <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                    <?php endif; ?>
+                    <ul class="add-to-links">
+                        <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                            <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                        <?php endif; ?>
+                        <?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+                            <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
+                        <?php endif; ?>
+                    </ul>
+                </div>          
+            </li>
+        <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+        </ul>
+        <?php endif */?>
+        
+        <?php endforeach ?>
+                </ul>
+</div>
+<?php endif; ?>
+
+<?php //$_productCollection->printlogquery(true); ?>
+
+
+<?php //echo $this->getToolbarHtml()?>
+<?php
+/*
+  $toolbar = $this->getToolbarBlock();
+  $toolbar->setCollection($_productCollection);
+   if($toolbar->getCollection()->getSize() > 0):
+      echo $toolbar->getPagerHtml(); //Pager
+      echo $toolbar->__('Items %s to %s of %s total', $toolbar->getFirstNum(), $toolbar->getLastNum(), $toolbar->getTotalNum());
+   endif;
+ */
+?>
+
+<?php
+    // manually get the toolbar block so we can do the page navigation
+    /*$toolbar = $this->getToolbarBlock();
+    $toolbar->setCollection($this->_getProductCollection());
+    
+    $totalCnt = $toolbar->getCollection()->getSize();
+    */
+    
+    
+    $pCtest = Mage::getModel('catalog/product')->getCollection()
+          ->addAttributeToSelect('*')
+          ->addAttributeToFilter('visibility', 4)
+          ->addAttributeToFilter('status', 1);
+    
+    $totalCnt = $pCtest->count();
+    //echo $cstest.'-'.$totalCnt;
+    //echo sizeof($toolbar->getPages())
+?>
+<?php
+$adjacents = 3;    
+$total_pages = $totalCnt;//$total_pages[num];
+
+/* Setup vars for query. */
+// $targetpage = "test.php"; 	//your file name  (the name of this file)
+$limit = 8; 	//how many items to show per page
+//$page = '2';//$_GET['page'];
+if($page) 
+    $start = ($page - 1) * $limit; //first item to display on this page
+else
+    $start = 0;	//if no page var is given, set start to 0
+
+/* Setup page vars for display. */
+if($page == 0) $page = 1; //if no page var is given, default to 1.
+$prev = $page - 1; //previous page is page - 1
+$next = $page + 1; //next page is page + 1
+$lastpage = ceil($total_pages/$limit); 
+$lpm1 = $lastpage - 1;	//last page minus 1
+
+$pagination = "";
+//$rowcnt = mysql_num_rows($result);
+
+if($lastpage > 1){ 
+    $pagination .= "<div id=\"pagination\" class=\"page-list\">";
+    //previous button
+    if ($page > 1){ 
+        //$pagination.= "<a href=\"$targetpage?page=1\"> First</a>";			
+        //$pagination.= "<a href=\"$targetpage?page=$prev\"> previous</a>";
+        $pagination.= "<span onclick=\"searchhint('page','1')\" style=\"cursor:pointer;\">First</span>";
+        $pagination.= "<span onclick=\"searchhint('page','$prev')\" style=\"cursor:pointer;\">Previous</span>";
+    }else{
+        $pagination.= "<span class=\"disabled\"> First</span>";	
+        $pagination.= "<span class=\"disabled\"> previous</span>";	
+    }
+
+                //pages	
+    if($lastpage < 7 + ($adjacents * 2)){
+        //not enough pages to bother breaking it up
+        for($counter = 1; $counter <= $lastpage; $counter++){
+           if($counter == $page)
+                $pagination.= "<span class=\"current\">$counter</span>";
+           else
+                //$pagination.= "<a href=\"$targetpage?page=$counter\">$counter</a>";
+                $pagination.= "<span onclick=\"searchhint('page','$counter')\" style=\"cursor:pointer;\">$counter</span>";					
+        }
+    }elseif($lastpage > 5 + ($adjacents * 2)){
+        //enough pages to hide some
+        //close to beginning; only hide later pages
+        if($page < 1 + ($adjacents * 2)){
+            for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++){
+                //$pagination.=$counter;
+                if ($counter == $page)
+                    $pagination.= "<span class=\"current\">$counter</span>";
+                else
+                    //$pagination.= "<a href=\"$targetpage?page=$counter\">$counter</a>";
+                    $pagination.= "<span onclick=\"searchhint('page','$counter')\" style=\"cursor:pointer;\">$counter</span>";
+             }
+             $pagination.= "<span>...</span>";
+             //$pagination.= "<a href=\"$targetpage?page=$lpm1\">$lpm1</a>";
+             //$pagination.= "<a href=\"$targetpage?page=$lastpage\">$lastpage</a>";	
+             $pagination.= "<span onclick=\"searchhint('page','$lpm1')\" style=\"cursor:pointer;\">$lpm1</span>";
+             $pagination.= "<span onclick=\"searchhint('page','$lastpage')\" style=\"cursor:pointer;\">$lastpage</span>";
+        }elseif($lastpage - ($adjacents * 2) > $page && $page > ($adjacents * 2)){
+            //in middle; hide some front and some back
+            //$pagination.= "<a href=\"$targetpage?page=1\">1</a>";
+            //$pagination.= "<a href=\"$targetpage?page=2\">2</a>";
+            $pagination.= "<span onclick=\"searchhint('page','1')\" style=\"cursor:pointer;\">1</span>";
+            $pagination.= "<span onclick=\"searchhint('page','2')\" style=\"cursor:pointer;\">2</span>";
+            $pagination.= "<span>...</span>";
+            
+            for($counter = $page - $adjacents; $counter <= $page + $adjacents; $counter++){
+               if($counter == $page)
+                   $pagination.= "<span class=\"current\">$counter</span>";
+               else
+                   //$pagination.= "<a href=\"$targetpage?page=$counter\">$counter</a>";	
+                   $pagination.= "<span onclick=\"searchhint('page','$counter')\" style=\"cursor:pointer;\">$counter</span>";
+            }
+            
+            $pagination.= "<span>...</span>";
+            //$pagination.= "<a href=\"$targetpage?page=$lpm1\">$lpm1</a>";
+            //$pagination.= "<a href=\"$targetpage?page=$lastpage\">$lastpage</a>";	
+            $pagination.= "<span onclick=\"searchhint('page','$lpm1')\" style=\"cursor:pointer;\">$lpm1</span>";
+            $pagination.= "<span onclick=\"searchhint('page','$lastpage')\" style=\"cursor:pointer;\">$lastpage</span>";
+        }else{
+            //close to end; only hide early pages
+            //$pagination.= "<a href=\"$targetpage?page=1\">1</a>";
+            //$pagination.= "<a href=\"$targetpage?page=2\">2</a>";
+            $pagination.= "<span onclick=\"searchhint('page','1')\" style=\"cursor:pointer;\">1</span>";
+            $pagination.= "<span onclick=\"searchhint('page','2')\" style=\"cursor:pointer;\">2</span>";
+            $pagination.= "<span>...</span>";
+            
+            for($counter = $lastpage - (2 + ($adjacents * 2)); $counter <= $lastpage; $counter++){
+                if ($counter == $page)
+                    $pagination.= "<span class=\"current\">$counter</span>";
+                else
+                    //$pagination.= "<a href=\"$targetpage?page=$counter\">$counter</a>";
+                    $pagination.= "<span onclick=\"searchhint('page','$counter')\" style=\"cursor:pointer;\">$counter</span>";
+            }
+        }
+    }
+
+    //next button
+    if($page < $counter - 1){
+        //$pagination.= "<a href=\"$targetpage?page=$next\">next </a>";
+        //$pagination.= "<a href=\"$targetpage?page=$lastpage\">Last </a>";
+        $pagination.= "<span onclick=\"searchhint('page','$next')\" style=\"cursor:pointer;\">Next</span>";
+        $pagination.= "<span onclick=\"searchhint('page','$lastpage')\" style=\"cursor:pointer;\">Last</span>";
+     }else{
+         $pagination.= "<span class=\"disabled\">Next </span>";
+         $pagination.= "<span class=\"disabled\">Last </span>";
+     }
+     $pagination.= "</div>\n";
+     
+}
+?>
+
+<?php
+       /* while($row = mysql_fetch_array($result))
+        {
+
+                echo '<pre>'; print_r($row); echo '</pre>';
+
+        }*/
+?>
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+
+<div class="content-bottom">
+    
+<div class="product-bg">&nbsp;</div>
+
+<div class="page-list">
+    
+<?php echo $pagination;  ?>
+</div>
+
+<div class="sort-container">
+<div class="products-per-page">
+<div class="grey demo-container">
+
+    
+<ul class="accordion"  id="accordion-1">
+    
+<li><a href="#" id="cursel">Showing <br><br><b style="font-weight: normal; font-size: 12px;">8 PRODUCTS PER PAGE</b></a>
+    <ul class="acc-inner-ul">                
+        <li class="show"><span onclick="prodPerPage('4');">4 PRODUCTS PER PAGE</span></li>
+        <li class="show"><span onclick="prodPerPage('8');">8 PRODUCTS PER PAGE</span></li>
+        <li class="show"><span onclick="prodPerPage('16');">16 PRODUCTS PER PAGE</span></li>
+        <li class="show"><span onclick="prodPerPage('32');">32 PRODUCTS PER PAGE</span></li>
+        <li class="show"><span onclick="prodPerPage('64');">64 PRODUCTS PER PAGE</span></li>
+    </ul>
+</li>
+    
+
+</ul> 
+</div>  
+</div>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+</div>
+</div>

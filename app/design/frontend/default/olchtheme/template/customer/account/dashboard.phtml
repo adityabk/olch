@@ -1,0 +1,642 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<? /* ?>
+<div class="mycustdiv">
+    
+<div class="dashboard">
+    <div class="page-title">
+        <h1><?php echo $this->__('My Dashboard') ?></h1>
+    </div>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <?php echo $this->getChildHtml('hello') ?>
+    <?php echo $this->getChildHtml('top') ?>
+    <div class="box-account box-info">
+        <div class="box-head">
+            <h2><?php echo $this->__('Account Information') ?></h2>
+        </div>
+        <?php // Extensions placeholder ?>
+        <?php echo $this->getChildHtml('customer.account.dashboard.extra') ?>
+        <?php echo $this->getChildHtml('info') ?>
+        <?php echo $this->getChildHtml('address') ?>
+    </div>
+    <?php echo $this->getChildHtml('info1') ?>
+    <?php echo $this->getChildHtml('info2') ?>
+</div>
+
+</div>
+<? */ ?>
+
+
+
+ <!--<div id="main" style="padding-top:160px; z-index:0; position:relative">           
+<div class="dashboard">
+    <div class="page-title">
+        <h1><?php echo $this->__('My Dashboard') ?></h1>
+    </div>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <?php echo $this->getChildHtml('hello') ?>
+    <?php echo $this->getChildHtml('top') ?>
+    <div class="box-account box-info">
+        <div class="box-head">
+            <h2><?php echo $this->__('Account Information') ?></h2>
+        </div>
+        <?php /* Extensions placeholder */ ?>
+        <?php echo $this->getChildHtml('customer.account.dashboard.extra') ?>
+        
+        <?php echo $this->getChildHtml('info') ?>
+        <?php echo $this->getChildHtml('address') ?>
+    </div>http://192.168.1.28/olch_magento/
+    <?php echo $this->getChildHtml('info1') ?>
+    <?php echo $this->getChildHtml('info2') ?>
+</div>-->
+
+
+
+
+
+<script>
+$(document).ready(function() {
+	$('a.login-window-gift').click(function() {
+		
+                //Getting the variable's value from a link 
+		var loginBox = $(this).attr('href');
+
+		//Fade in the Popup
+		$(loginBox).fadeIn(300);
+		
+		//Set the center alignment padding + border see css style
+		var popMargTop = ($(loginBox).height() + 24) / 2; 
+		var popMargLeft = ($(loginBox).width() + 24) / 2; 
+		
+		$(loginBox).css({ 
+			'margin-top' : -popMargTop,
+			'margin-left' : -popMargLeft
+		});
+		
+		// Add the mask to body 
+		$('#login-box-gift').fadeIn(300);
+		
+		return false;
+	});
+	
+	// When clicking on the button close or the mask layer the popup closed
+	$('a.close, #close1').live('click', function() { 
+	  $('#mask , .login-popup-gift').fadeOut(300); 
+	return false;
+	});
+});
+</script>
+<!--pop-up js ends-->
+
+
+<script type="text/javascript">
+function showContent(id)
+{
+	var divId="content";
+	var actId="active";
+	for (var i=1; i<=8; i++)
+	{
+		var currentDivId=divId+i;
+		var activeClsId=actId+i;
+		if(i==id)
+		{
+		document.getElementById(currentDivId).style.display="block";
+		document.getElementById(activeClsId).className="active";
+		}
+		else
+		{
+		document.getElementById(currentDivId).style.display="none";
+		document.getElementById(activeClsId).className="";
+		}
+	}
+	return false;
+}
+
+</script>
+
+
+
+<div id="main" style="padding-top:160px; z-index:0; position:relative">        
+<div class="acc-order">
+<div class="account-sec">
+<div class="your-acc">
+<h1>Your Account</h1>
+
+<!-- Recent Orders Starts -->
+<div class="recent">
+<h2>RECENT ORDERS</h2>
+<?php echo $this->getChildHtml('top'); //template/sales/order/recent.phtml ?>
+
+<div class="load"><h2>LOAD MORE</h2></div>
+</div>
+<!-- Recent Orders Ends -->
+
+</div>
+<div class="info">
+<!-- Tabs Starts -->    
+<div class="section1">
+<a href="javascript:void('0')" onClick="javascript:return showContent('1');" id="active1" class="active">
+<ul class="con-info">
+<?php echo $this->getChildHtml('info'); //template/customer/account/dashboard/info.phtml ?>
+</ul>
+</a>
+<a href="javascript:void('0')" onClick="javascript:return showContent('2');" id="active2">
+<ul class="con-info">
+<li><h2 class="info-mail">PRIMARY BILLING ADDRESS</h2></li>
+<li><p>KEVIN KEARNEY<br />
+1324 MASSACHUSETTS AVE<br />
+CAMBRIDGE, MA 02138<br />
+USA<br />
+123-456-7890</p></li>
+
+<li><a href="#"><h2>EDIT</h2></a>
+</li>
+</ul>
+</a>
+<a href="javascript:void('0')" onClick="javascript:return showContent('3');" id="active3">
+<ul class="con-info">
+<li><h2 class="info-mail">PRIMARY SHIPPING ADDRESS</h2></li>
+<li><p>KEVIN KEARNEY<br />
+1324 MASSACHUSETTS AVE<br />
+CAMBRIDGE, MA 02138<br />
+USA<br />
+123-456-7890</p></li>
+
+<li><a href="#"><h2>EDIT</h2></a></li>
+</ul>
+</a>
+<a href="javascript:void('0')" onClick="javascript:return showContent('4');" id="active4">
+<ul class="con-info">
+<li><h2 class="info-mail">receive email</h2></li>
+<li><p><input type="checkbox" name="yes" value="weekly updates">weekly updates</p></li>
+<li class="offer"><p><input type="checkbox" name="yes" value="special offers">special offers</p></li>
+<li>
+<a href="#"><h2>save</h2></a>
+</li>
+</ul>
+</a>
+</div>
+<!-- Tabs Ends -->    
+
+<!-- Tab Content Starts -->  
+<!-- Tab1 Starts -->
+<div class="artical1" id="content1" style="display:block">
+<?php /* ?>
+    <form action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate">
+    <?php echo $this->getBlockHtml('formkey')?>
+           
+<ul class="new-pass pass-new">
+<li><input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='KEVIN'; }" onFocus="javascript:if(this.value=='KEVIN'){this.value='';}" value="<?php echo $this->htmlEscape($this->getCustomer()->getFirstname()) ?>" id="<?php echo $this->getFieldId('firstname')?>" name="<?php echo $this->getFieldName('firstname')?>"></li>
+
+<li><input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='KEARNEY'; }" onFocus="javascript:if(this.value=='KEARNEY'){this.value='';}" value="<?php echo $this->htmlEscape($this->getCustomer()->getLastname()) ?>" id="<?php echo $this->getFieldId('lastname')?>" name="<?php echo $this->getFieldName('lastname')?>"></li>
+
+<li><input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='KEVIN@ALLDAY.COM'; }" onFocus="javascript:if(this.value=='KEVIN@ALLDAY.COM'){this.value='';}" value="<?php echo $this->htmlEscape($this->getCustomer()->getEmail()) ?>" id="name" name="nsme"></li>
+
+
+
+<ul class="cancel">
+<li><a href="#">CANCEL</a></li>
+<li class="save-line"><a href="#">save</a><button type="submit" title="<?php echo $this->__('Save') ?>" class="button"><span><span><?php echo $this->__('Save') ?></span></span></button></li>
+</ul>
+</ul> 
+ </form> 
+ <?php */ ?>
+           <form action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate">
+    <div class="fieldset">
+        <?php echo $this->getBlockHtml('formkey')?>
+        <h2 class="legend"><?php echo $this->__('Account Information') ?></h2>
+        <ul class="form-list">
+            <li class="fields">
+                <?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getCustomer())->toHtml() ?>
+            </li>
+            <li>
+                <label for="email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+                <div class="input-box">
+                    <input type="text" name="email" id="email" value="<?php echo $this->htmlEscape($this->getCustomer()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text required-entry validate-email" />
+                </div>
+            </li>
+        <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>
+        <?php if ($_dob->isEnabled()): ?>
+            <li><?php echo $_dob->setDate($this->getCustomer()->getDob())->toHtml() ?></li>
+        <?php endif ?>
+        <?php $_taxvat = $this->getLayout()->createBlock('customer/widget_taxvat') ?>
+        <?php if ($_taxvat->isEnabled()): ?>
+            <li><?php echo $_taxvat->setTaxvat($this->getCustomer()->getTaxvat())->toHtml() ?></li>
+        <?php endif ?>
+        <?php $_gender = $this->getLayout()->createBlock('customer/widget_gender') ?>
+        <?php if ($_gender->isEnabled()): ?>
+            <li><?php echo $_gender->setGender($this->getCustomer()->getGender())->toHtml() ?></li>
+        <?php endif ?>
+            <li class="control">
+                <input type="checkbox" name="change_password" id="change_password" value="1" onclick="setPasswordForm(this.checked)" title="<?php echo $this->__('Change Password') ?>"<?php if($this->getCustomer()->getChangePassword()==1): ?> checked="checked"<?php endif; ?> class="checkbox" /><label for="change_password"><?php echo $this->__('Change Password') ?></label>
+            </li>
+        </ul>
+    </div>
+    <div class="fieldset" style="display:none;">
+        <h2 class="legend"><?php echo $this->__('Change Password') ?></h2>
+        <ul class="form-list">
+            <li>
+                <label for="current_password" class="required"><em>*</em><?php echo $this->__('Current Password') ?></label>
+                <div class="input-box">
+                    <input type="password" title="<?php echo $this->__('Current Password') ?>" class="input-text" name="current_password" id="current_password" />
+                </div>
+            </li>
+            <li class="fields">
+                <div class="field">
+                    <label for="password" class="required"><em>*</em><?php echo $this->__('New Password') ?></label>
+                    <div class="input-box">
+                        <input type="password" title="<?php echo $this->__('New Password') ?>" class="input-text validate-password" name="password" id="password" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="confirmation" class="required"><em>*</em><?php echo $this->__('Confirm New Password') ?></label>
+                    <div class="input-box">
+                        <input type="password" title="<?php echo $this->__('Confirm New Password') ?>" class="input-text validate-cpassword" name="confirmation" id="confirmation" />
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="buttons-set">
+        <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+        <p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
+        <button type="submit" title="<?php echo $this->__('Save') ?>" class="button"><span><span><?php echo $this->__('Save') ?></span></span></button>
+    </div>
+</form>
+
+    
+</div>
+<!-- Tab1 Ends -->
+
+<!-- Tab2 Starts -->
+<div class="artical1" id="content2" style="display:none">
+       <?php /* ?> <div class="primary-billing">
+<ul class="form">
+<li class="name">
+<div class="f-name">
+<input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='KEVIN'; }" onFocus="javascript:if(this.value=='KEVIN'){this.value='';}" value="KEVIN" id="email" name="email">
+</div>
+<div class="l-name">
+<input type="text" maxlength="66" class="textfill" onBlur="javascript:if(this.value==''){ this.value='KEARNEY'; }" onFocus="javascript:if(this.value=='KEARNEY'){this.value='';}" value="KEARNEY" id="email" name="email">
+</div>
+</li>
+<li>
+<input type="text" maxlength="67" class="textfill" onBlur="javascript:if(this.value==''){ this.value='1324 MASSACHUSETTS AVENUE'; }" onFocus="javascript:if(this.value=='1324 MASSACHUSETTS AVENUE'){this.value='';}" value="1324 MASSACHUSETTS AVENUE" id="email" name="email">
+</li>
+<li>
+<input type="text" maxlength="68" class="textfill" onBlur="javascript:if(this.value==''){ this.value='ADDRESS LINE 2'; }" onFocus="javascript:if(this.value=='ADDRESS LINE 2'){this.value='';}" value="ADDRESS LINE 2" id="name" name="nsme"></li>
+
+</ul>
+<div class="addresing">
+<ul class="form">
+
+
+
+<li class="city">
+<input type="text" maxlength="69" class="textfill" onBlur="javascript:if(this.value==''){ this.value='CAMBRIDGE'; }" onFocus="javascript:if(this.value=='CAMBRIDGE'){this.value='';}" value="CAMBRIDGE" id="name" name="nsme"></li>
+
+<li class="state">
+<div class="sort-container">
+<ul class="sort-product">
+     <li><a href="#">MA</a></li>
+
+    
+</ul>
+</div>
+<div class="l-name">
+<input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='02138'; }" onFocus="javascript:if(this.value=='02138'){this.value='';}" value="02138" id="name" name="nsme"></div>
+
+</li>
+<li class="state">
+<div class="sort-container">
+<ul class="sort-product">
+     <li><a href="#">USA</a></li>
+
+    
+</ul>
+</div>
+
+<div class="l-name">
+<input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='123-456-7890'; }" onFocus="javascript:if(this.value=='123-456-7890'){this.value='';}" value="123-456-7890" id="name" name="nsme"></div>
+</li>
+
+</ul>
+</div>
+<div class="save">
+<span><a href="#">CANCEL</a></span>
+<button id="send2" name="send" title="Login" class="button" type="submit"><span><span>SAVE</span></span></button>
+</div>
+</div> <?php */ ?>
+    <div class="page-title">
+    <h1><?php echo $this->__('Address Books') ?></h1>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<table width="100%">
+    <tr>
+        <td style="width:50%;"><h3>Default</h3>
+            <table width="100%">
+            <?php if(!empty($primaryAddresses)): ?>
+                <?php foreach($primaryAddresses as $_address): ?>
+                <tr>
+                    <td>
+                    <address>
+                        <?php echo $_address->format('html') ?>
+                    </address>
+                    <p>
+                        <strong><a href="<?php echo $this->getUrl('customer/address/form', array('address'=>$_address->getAddressId())) ?>" class="red-link"><?php echo $this->__('Edit Address') ?></a></strong>
+                    </p>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td>
+                        <p><?php echo $this->__('You have no default entries in your address book.') ?></p>
+                    </td>
+                </tr>
+            <?php endif ?>
+            </table>
+        </td>
+        <td style="width:50%;"><h3><?php echo $this->__('Additional Address Entries') ?></h3>
+            <table width="100%">
+            <?php if(!empty($alternativeAddresses)): ?>
+                <?php foreach($alternativeAddresses as $_address): ?>
+                <tr>
+                    <td>
+                    <address>
+                        <?php echo $_address->format('html') ?>
+                    </address>
+                    <p>
+                        <strong><a href="<?php echo $this->getUrl('customer/address/form', array('address'=>$_address->getAddressId())) ?>" class="red-link"><?php echo $this->__('Edit Address') ?></a></strong><span class="separator">&nbsp;|&nbsp;</span><strong><a href="#" onclick="return deleteAddress('<?php echo $_address->getAddressId() ?>');" class="red-link"><?php echo $this->__('Delete Address') ?></a></strong>
+                    </p>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td>
+                        <p><?php echo $this->__('You have no additional entries in your address book.') ?></p>
+                    </td>
+                </tr>
+            <?php endif ?>
+            </table>
+        </td>
+    </tr>
+</table>
+<div class="buttons-set">
+    <p class="back-link"><a href="<?php echo $this->getUrl('customer/account/') ?>"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
+    <button type="button" onclick="window.location='<?php echo $this->getUrl('customer/address/form') ?>';" class="button"><span><span><?php echo $this->__('New Address') ?></span></span></button>
+</div>
+<script type="text/javascript">
+    function deleteAddress(addressId) {
+        if(confirm('<?php echo $this->__('Are you sure you want to delete this address?') ?>')) {
+            window.location='<?php echo $this->getUrl("customer/address/delete") ?>address/'+addressId;
+        }
+        return false;
+    }
+</script>
+
+</div>
+<!-- Tab2 Ends -->
+
+<!-- Tab3 Starts -->
+<div class="artical1" id="content3" style="display:none">
+       <div class="primary-billing">
+<ul class="form">
+<li class="name">
+<div class="f-name">
+<input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='KEVIN'; }" onFocus="javascript:if(this.value=='KEVIN'){this.value='';}" value="KEVIN" id="email" name="email">
+</div>
+<div class="l-name">
+<input type="text" maxlength="66" class="textfill" onBlur="javascript:if(this.value==''){ this.value='KEARNEY'; }" onFocus="javascript:if(this.value=='KEARNEY'){this.value='';}" value="KEARNEY" id="email" name="email">
+</div>
+</li>
+<li>
+<input type="text" maxlength="67" class="textfill" onBlur="javascript:if(this.value==''){ this.value='1324 MASSACHUSETTS AVENUE'; }" onFocus="javascript:if(this.value=='1324 MASSACHUSETTS AVENUE'){this.value='';}" value="1324 MASSACHUSETTS AVENUE" id="email" name="email">
+</li>
+<li>
+<input type="text" maxlength="68" class="textfill" onBlur="javascript:if(this.value==''){ this.value='ADDRESS LINE 2'; }" onFocus="javascript:if(this.value=='ADDRESS LINE 2'){this.value='';}" value="ADDRESS LINE 2" id="name" name="nsme"></li>
+
+</ul>
+<div class="addresing">
+<ul class="form">
+
+
+
+<li class="city">
+<input type="text" maxlength="69" class="textfill" onBlur="javascript:if(this.value==''){ this.value='CAMBRIDGE'; }" onFocus="javascript:if(this.value=='CAMBRIDGE'){this.value='';}" value="CAMBRIDGE" id="name" name="nsme"></li>
+
+<li class="state">
+<div class="sort-container">
+<ul class="sort-product">
+     <li><a href="#">MA</a></li>
+
+    
+</ul>
+</div>
+<div class="l-name">
+<input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='02138'; }" onFocus="javascript:if(this.value=='02138'){this.value='';}" value="02138" id="name" name="nsme"></div>
+
+</li>
+<li class="state">
+<div class="sort-container">
+<ul class="sort-product">
+     <li><a href="#">USA</a></li>
+
+    
+</ul>
+</div>
+
+<div class="l-name">
+<input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='123-456-7890'; }" onFocus="javascript:if(this.value=='123-456-7890'){this.value='';}" value="123-456-7890" id="name" name="nsme"></div>
+</li>
+
+</ul>
+</div>
+<div class="save">
+<span><a href="#">CANCEL</a></span>
+<button id="send2" name="send" title="Login" class="button" type="submit"><span><span>SAVE</span></span></button>
+</div>
+</div>
+</div>
+<!-- Tab3 Ends -->
+<!-- Tab Content Ends -->    
+</div>
+</div>
+</div>
+
+
+   </div> 
+<!-- Gift Contact POPUP Starts -->
+<div class="login-popup-gift" id="login-box-gift"  >
+<div class="gift-content">
+<a href="#" class="close" id="close">X</a>  
+<div class="expanded">
+<h1>Your Gift Contacts</h1>
+
+<ul class="note">
+<li><h2>NAME</h2></li>
+<li><h2>LAST ORDER</h2></li>
+<li><h2>NOTE</h2></li>
+</ul>
+<ul class="kevin">
+<li><h2>KEVIN KEARNEY</h2></li>
+<li><h2>APRIL 4 2013</h2></li>
+<li><h3>Lorem ipsum dolor sit amet, consectetur adipisicin elit, sed do...</h3></li>
+<li ><a href="#"><h2>EDIT</h2></a></li>
+<li class="edit"><a href="#"><h2>/ DELETE</h2></a></li>
+<ul class="kearney">
+<li><div class="name-1">
+<input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='KEVIN'; }" onFocus="javascript:if(this.value=='KEVIN'){this.value='';}" value="KEVIN" id="email" name="email">
+</div></li>
+<li><div class="name-1">
+<input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='KEARNEY'; }" onFocus="javascript:if(this.value=='KEARNEY'){this.value='';}" value="KEARNEY" id="email" name="email">
+</div></li>
+<li>
+<input type="text" maxlength="67" class="textfill" onBlur="javascript:if(this.value==''){ this.value='CAMBRIDGE'; }" onFocus="javascript:if(this.value=='CAMBRIDGE'){this.value='';}" value="CAMBRIDGE" id="email" name="email">
+</li>
+<li>
+<input type="text" maxlength="67" class="textfill" onBlur="javascript:if(this.value==''){ this.value='1324 MASSACHUSETTS AVENUE'; }" onFocus="javascript:if(this.value=='1324 MASSACHUSETTS AVENUE'){this.value='';}" value="1324 MASSACHUSETTS AVENUE" id="email" name="email">
+</li>
+<div class="show-1"><a href="#">MA</a></div>
+<li><div class="name-1">
+<input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='02138'; }" onFocus="javascript:if(this.value=='02138'){this.value='';}" value="02138" id="email" name="email">
+</div></li>
+<li>
+<input type="text" maxlength="67" class="textfill" onBlur="javascript:if(this.value==''){ this.value='ADDRESS LINE 2'; }" onFocus="javascript:if(this.value=='ADDRESS LINE 2'){this.value='';}" value="ADDRESS LINE 2" id="email" name="email">
+</li>
+<div class="show-1"><a href="#">USA</a></div>
+<li><div class="name-1">
+<input type="text" maxlength="65" class="textfill" onBlur="javascript:if(this.value==''){ this.value='123-456-7890'; }" onFocus="javascript:if(this.value=='123-456-7890'){this.value='';}" value="123-456-7890" id="email" name="email">
+</div></li>
+<li><textarea name="StoryDetails" id="ctl00_cphMain_txtStoryDetails" onFocus="if(this.value == 'message me here'){this.value='';}" onBlur="if(this.value == ''){this.value='message me here';}" style="">message me here</textarea></li>
+<ul class="cancel">
+<li><a href="#">CANCEL</a></li>
+<li class="save-line"><a href="#">save</a></li>
+</ul>
+</ul>
+</ul>
+<div class="kevin-k">
+<ul class="april april-1">
+<li><h2>KEVIN KEARNEY</h2></li>	
+<li><h4>APRIL 4 2013</h4></li>
+<li><h3>Lorem ipsum dolor sit amet, consectetur adipisicin elit, sed do...</h3></li>
+<li ><a href="#"><h2>EDIT</h2></a></li>
+<li class="edit"><a href="#"><h2>/ DELETE</h2></a></li>
+</ul>
+<ul class="april">
+<li><h2>KEVIN KEARNEY</h2></li>	
+<li><h4>APRIL 4 2013</h4></li>
+<li><h3>Lorem ipsum dolor sit amet, consectetur adipisicin elit, sed do...</h3></li>
+<li ><a href="#"><h2>EDIT</h2></a></li>
+<li class="edit"><a href="#"><h2>/ DELETE</h2></a></li>
+</ul>
+<ul class="april">
+<li><h2>KEVIN KEARNEY</h2></li>	
+<li><h4>APRIL 4 2013</h4></li>
+<li><h3>Lorem ipsum dolor sit amet, consectetur adipisicin elit, sed do...</h3></li>
+<li ><a href="#"><h2>EDIT</h2></a></li>  
+<li class="edit"><a href="#"><h2>/ DELETE</h2></a></li>
+</ul>
+<div class="add"> <h2>ADD NEW GIFT CONTACT</h2></div>
+</div>
+
+</div>
+  
+</div>
+
+ </div>
+<!-- Gift Contact POPUP Ends -->
+
+
+<div id="page" class="grid">
+  <div id="catalog" role="main">
+       <div class="sort-container">
+    <h1>SORT BY</h1>
+    
+   <ul class="sort">
+   <li><a href="#">NECKTIES<span>(154)</span></a></li>
+    <li><a href="#">BOWTIES<span>(75)</span></a></li>
+    <li><a href="#">BLUE <span>(229)</span></a></li>
+   </ul>
+  
+    <ul class="sort-product">
+     <li><a href="#">PRODUCT</a></li>
+    <li><a href="#">COLOR</a></li>
+    <li><a href="#">MATERIAL / SEASON</a></li>
+    
+</ul>
+
+    </div>
+    <div class="right-catalog">
+        
+<?php
+Mage::app();
+Mage::getSingleton('customer/session')->isLoggedIn();
+$session = Mage::getSingleton('customer/session');
+$cidData = $session->isLoggedIn();
+$cidvar = $session->getId();
+
+
+
+$wishList = Mage::getSingleton('wishlist/wishlist')->loadByCustomer($cidvar);
+$wishListItemCollection = $wishList->getItemCollection();
+
+if (count($wishListItemCollection)) {
+    $arrProductIds = array();
+echo '<ul class="product-catalog">';
+foreach ($wishListItemCollection as $item) {
+        /* @var $product Mage_Catalog_Model_Product */
+        $_product = $item->getProduct();
+        //$arrProductIds[] = $product->getId();
+        //echo '<pre>'; print_r($product); echo '</pre>';
+?>        
+        
+ <li><span class="hotspot" onMouseOver="tooltip.show('<h1>PRODUCT NAME</h1> <p>100% Superfine English<br>Cotton Soft Woven.<br>Handmade.</p> <p>Measures 2.5 at<br>widest poin</p><h1>$140.00</h1>');" onMouseOut="tooltip.hide();">           
+            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">    
+<img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(202); ?>" width="202" height="202" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>"/>
+</a>
+  </span></li>          
+            
+<?php
+}
+echo '</ul>';
+}else{ 
+?>
+   
+<p><?php echo $this->__('You have placed no products yet.') ?></p>
+ <?php } ?>
+        
+        
+        
+    
+    
+      
+    </div>
+    
+  </div>
+</div>

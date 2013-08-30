@@ -1,0 +1,48 @@
+<?php 
+/**
+ * Ultimate_AjaxProductSort extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category   	Ultimate
+ * @package		Ultimate_AjaxProductSort
+ * @copyright  	Copyright (c) 2013
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
+ */
+/**
+ * Sort list template
+ *
+ * @category	Ultimate
+ * @package		Ultimate_AjaxProductSort
+ * @author Ultimate Module Creator
+ */
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php $_sorts = $this->getSorts(); ?>
+<div class="page-title sort-title">
+	<?php if(Mage::helper('ajaxproductsort/sort')->isRssEnabled()) : ?>
+		<a href="<?php echo Mage::helper('ajaxproductsort/sort')->getRssUrl();?>" class="link-rss"><?php echo Mage::helper('ajaxproductsort')->__('Subscribe to RSS Feed')?></a>
+	<?php endif;?>
+	<h1><?php echo Mage::helper('ajaxproductsort')->__('Sort') ?></h1>
+</div>
+<?php if ($_sorts->getSize() > 0) :?>
+<?php echo $this->getPagerHtml(); ?>
+<div class="sort-list-container">
+	<?php foreach ($_sorts as $_sort) : ?>
+		<div class="sort-list-item">
+			<a href="<?php echo $_sort->getSortUrl();?>" title="<?php echo $this->htmlEscape($_sort->getColor()) ?>">
+				<?php echo $_sort->getColor(); ?>
+			</a>
+
+		</div>
+	<?php endforeach;?>
+</div>
+<?php echo $this->getPagerHtml(); ?>
+<?php else : ?>
+	<?php echo Mage::helper('ajaxproductsort')->__('There are no sort at this moment');?>
+<?php endif;?> 

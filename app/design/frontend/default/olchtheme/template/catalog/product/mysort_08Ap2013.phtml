@@ -1,0 +1,358 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+
+<?php
+//$attributeCode = 'color';
+
+function getAttribute($attributeCode){
+$product = Mage::getModel('catalog/product');
+
+$productCollection = Mage::getResourceModel('eav/entity_attribute_collection')
+   ->setEntityTypeFilter($product->getResource()->getTypeId())
+   ->addFieldToFilter('attribute_code', $attributeCode);
+
+$attribute = $productCollection->getFirstItem()->setEntity($product->getResource());
+//print_r($attribute->getData()); // print out the available attributes
+
+$options = $attribute->getSource()->getAllOptions(false);// print out attribute options
+return $options;
+}
+
+$materialOptions = getAttribute('material_season');
+$colorOptions = getAttribute('color');
+//echo '<pre>'; print_r($colorOptions); print_r($materialOptions); echo '</pre>';
+
+/*foreach($colorOptions as $key=>$valArr){
+        $colorkey = $valArr['value'];
+        $color = $valArr['label'];
+        echo $colorkey.'-'.$color.'<br>';
+}
+
+foreach($materialOptions as $key=>$valArr){
+        $matkey = $valArr['value'];
+        $material = $valArr['label'];
+        echo $matkey.'-'.$material.'<br>';
+}*/
+
+$product = Mage::getModel('catalog/product');
+$helper     = Mage::helper('catalog/category');
+$collection = $helper->getStoreCategories('name', true, false);
+$collection->setOrder( 'position' );
+$this->setCollection($collection);
+    //$array      = $helper->getStoreCategories('name', false, false);
+?>
+
+  
+
+
+<script type="text/javascript">
+jQuery.noConflict();
+jQuery(document).ready(function(jQuery){
+					
+    jQuery('#accordion-2').dcAccordion({
+            eventType: 'click',
+            autoClose: false,
+            saveState: true,
+            disableLink: true,
+            speed: 'fast',
+            classActive: 'test',
+            showCount: true
+    });
+					
+});
+</script>
+
+<script type="text/javascript">
+function sortpanel(mystr){
+    
+    var mystrArr=mystr.split("|");
+    var refId = mystrArr[0];
+    var pCnt = mystrArr[1];
+    var attName = mystrArr[2];
+    var attType = mystrArr[3];
+    
+    //alert(refId); alert(pCnt); alert(attName); alert(attType);
+    document.getElementById('sortby-opts').style.display = "block";
+    
+jQuery.noConflict();
+jQuery("ul.sort").append('<li>'+attName+' ('+pCnt+')</li>');
+updatehdnsort(mystr,'add');
+
+jQuery("ul.sort li").last().click(function(){
+updatehdnsort(mystr,'remove');
+jQuery(this).closest('li').remove();
+});
+
+    return false;
+}  
+
+
+function updatehdnsort(mystr,myact){
+    //alert(myact);
+    
+    var mystrArr=mystr.split("|");
+    var refId = mystrArr[0];
+    var pCnt = mystrArr[1];
+    var attName = mystrArr[2];
+    var attType = mystrArr[3];
+    
+    var hdnproduct = document.getElementById('hdnproduct');
+    var hdncolor = document.getElementById('hdncolor');
+    var hdnmatses = document.getElementById('hdnmatses');
+    
+if(myact=='add'){
+    if(attType == 'product'){
+        if(hdnproduct.value == '0'){
+            hdnproduct.value = refId+',';    
+        }else{
+            hdnproduct.value = hdnproduct.value+refId+',';
+        }
+    }else if(attType == 'color'){
+        if(hdncolor.value == '0'){
+            hdncolor.value = refId+',';    
+        }else{
+            hdncolor.value = hdncolor.value+refId+',';
+        }
+    }else if(attType == 'matses'){
+        if(hdnmatses.value == '0'){
+            hdnmatses.value = refId+',';    
+        }else{
+            hdnmatses.value = hdnmatses.value+refId+',';
+        }
+    }
+}
+if(myact=='remove'){
+    if(attType == 'product'){
+        hdnproduct.value = hdnproduct.value.replace(refId+',','');
+        if(hdnproduct.value.length == '0'){hdnproduct.value = '0';}
+    }
+    if(attType == 'color'){
+        hdncolor.value = hdncolor.value.replace(refId+',','');
+        if(hdncolor.value.length == '0'){hdncolor.value = '0';}
+    }
+    if(attType == 'matses'){
+        hdnmatses.value = hdnmatses.value.replace(refId+',','');
+        if(hdnmatses.value.length == '0'){hdnmatses.value = '0';}
+    }
+}
+    
+    
+    ajaxsort(refId,attType);
+    
+    return true;
+
+}
+
+</script>   
+
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+    var contactForm = new VarienForm('contactForm', true);
+//]]>
+function md5_hash_get(url,val,attType)
+{   
+    if(val.replace(/\s/g,"") == '')
+    {   
+        alert('Invalid Request');                                                                           
+    }else
+    {       
+        url = url+'name/'+val;
+        new Ajax.Request(url, {
+          method: 'get',          
+          onComplete: function(req) {       
+                                               
+                if(req.responseText == 'n')
+                {
+                    alert('Invalid Request');
+                }else{
+                    $('nh').innerHTML = req.responseText;                   
+                }
+          }
+        });
+    }
+}
+function ajaxsort(val,attType)
+{   
+    var url = '<?php echo $this->getUrl('catalog/product/sortajax'); ?>';
+    
+var hdnproduct = document.getElementById('hdnproduct').value;
+var hdncolor = document.getElementById('hdncolor').value;
+var hdnmatses = document.getElementById('hdnmatses').value;
+
+    //alert(url);
+    var params = { product: hdnproduct, color: hdncolor, matses: hdnmatses };
+    
+    
+    if(val.replace(/\s/g,"") == '')
+    {   
+        alert('Invalid Request');         
+    }else
+    {       
+        new Ajax.Request(url, {
+          method: 'post',
+          parameters: params,
+          onComplete: function(req) {       
+                                               
+                if(req.responseText == 'n')
+                {
+                    alert('Invalid Request');
+                }else{
+                    $('myid').innerHTML = req.responseText;                   
+                    //alert(req.responseText);
+                }
+          }
+        });
+    }
+}
+</script>
+
+
+ 
+<h1>SORT BY</h1>
+<div id="sortby-opts" style="display:none;">
+<ul class="sort">
+<!--<li><a href="#">NECKTIES<span>(154)</span></a></li>
+<li><a href="#">BLUE <span>(229)</span></a></li>
+<li><a href="#">SUMMER<span>(175)</span></a></li>-->
+
+</ul>
+</div>
+
+<div class="grey demo-container">
+<?php
+/*foreach ($collection as $cat):
+    echo '<pre>'; print_r($cat); echo '</pre>';
+endforeach;*/
+?>
+<ul class="accordion"  id="accordion-2">
+<li><a href="#">Product</a>
+    <ul class="acc-inner-ul">        
+<?php
+foreach ($collection as $cat):
+    $categoryId = $cat->getEntityId();
+    $catName = $cat->getName();
+    $pCnt = Mage::getModel('catalog/category')->load($categoryId)->getProductCount();
+    
+    //echo '<li><a href="#">'.$categoryId.'-'.$catName.'('.$mycnt.')</a></li>';
+?>        
+        <li><a href='' onclick= "return sortpanel('<?php echo $categoryId.'|'.$pCnt.'|'.$catName.'|product';?>');">
+            <?php echo $catName; ?></a></li>
+<?php    
+endforeach;
+?>
+    </ul>
+</li>
+    
+<li><a href="#">Color</a>
+    <ul class="acc-inner-ul">        
+<?php        
+foreach($colorOptions as $key=>$valArr){
+        $colorkey = $valArr['value'];
+        $color = $valArr['label'];
+        
+        $_productCollection = Mage::getModel('catalog/product')->getCollection()
+          ->addAttributeToSelect('*')
+          ->addAttributeToFilter('visibility', 4)
+          ->addAttributeToFilter('status', 1)
+            ->addAttributeToFilter('color', $colorkey)
+          ->load();
+        
+        $pCnt = $_productCollection->count();
+        
+       // echo '<li><a href="#">'.$colorkey.'-'.$color.'('.$pCnt.')</a></li>';
+?>        
+        <li><a href='' onclick= "return sortpanel('<?php echo $colorkey.'|'.$pCnt.'|'.$color.'|color';?>');">
+            <?php echo $color;?></a></li>
+<?php        
+}
+?>        
+    </ul>
+</li>
+    
+<li><a href="#">Material / Season</a>
+    <ul class="acc-inner-ul">
+<?php        
+foreach($materialOptions as $key=>$valArr){
+        $matkey = $valArr['value'];
+        $material = $valArr['label'];
+        
+        $_productCollection = Mage::getModel('catalog/product')->getCollection()
+          ->addAttributeToSelect('*')
+          ->addAttributeToFilter('visibility', 4)
+          ->addAttributeToFilter('status', 1)
+            ->addAttributeToFilter('material_season', $matkey)
+          ->load();        
+        $pCnt = $_productCollection->count();
+        
+        //echo '<li><a href="#">'.$matkey.'-'.$material.'('.$pCnt.')</a></li>';
+?>        
+        <li><a href='' onclick= "return sortpanel('<?php echo $matkey.'|'.$pCnt.'|'.$material.'|matses';?>');">
+            <?php echo $material; ?></a></li>
+<?php
+}
+?>        
+    </ul>
+</li>
+    
+    
+
+
+</ul>
+<input type="hidden" name="hdnproduct" id="hdnproduct" value="0">
+<input type="hidden" name="hdncolor" id="hdncolor" value="0">
+<input type="hidden" name="hdnmatses" id="hdnmatses" value="0">
+</div>  
+  
+  
+  
+  
+<!--
+<h1>SORT BY</h1>
+<ul class="sort">
+<li><a href="#">NECKTIES<span>(154)</span></a></li>
+<li><a href="#">BLUE <span>(229)</span></a></li>
+<li><a href="#">SUMMER<span>(175)</span></a></li>
+</ul>
+
+
+<div id="att-opts" style="display:block;">
+<ul class="sort-product">
+<li><a href="#">PRODUCT</a></li>
+<li><a href="#">COLOR</a></li>
+<li><a href="#">MATERIAL / SEASON</a></li>
+</ul>
+</div>-->

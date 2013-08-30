@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Ultimate_AjaxProductSort extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category   	Ultimate
+ * @package		Ultimate_AjaxProductSort
+ * @copyright  	Copyright (c) 2013
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
+ */
+--> 
+<layout>
+	<!-- Sort grid action -->
+	<adminhtml_ajaxproductsort_sort_index>
+		<reference name="menu">
+			<action method="setActive">
+				<menupath>ajaxproductsort/sort</menupath>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="ajaxproductsort/adminhtml_sort" name="sort" />
+		</reference>
+	</adminhtml_ajaxproductsort_sort_index>
+	<adminhtml_ajaxproductsort_sort_grid>
+		<block type="core/text_list" name="root" output="toHtml">
+			<block type="ajaxproductsort/adminhtml_sort_grid" name="sort_grid"/>
+		</block>
+	</adminhtml_ajaxproductsort_sort_grid>
+	<!-- Sort add/edit action -->
+	<adminhtml_ajaxproductsort_sort_edit>
+		<update handle="editor"/>
+		<reference name="menu">
+			<action method="setActive">
+				<menupath>ajaxproductsort/sort</menupath>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="ajaxproductsort/adminhtml_sort_edit" name="sort_edit"></block>
+		</reference>
+		<reference name="left">
+			<block type="ajaxproductsort/adminhtml_sort_edit_tabs" name="sort_tabs"></block>
+		</reference> 
+	</adminhtml_ajaxproductsort_sort_edit>
+	<adminhtml_ajaxproductsort_sort_catalog_product_sorts>
+		<block type="core/text_list" name="root" output="toHtml">
+			<block type="ajaxproductsort/adminhtml_catalog_product_edit_tab_sort" name="product.edit.tab.sort"/>
+			<block type="adminhtml/widget_grid_serializer" name="sort_grid_serializer">
+				<reference name="sort_grid_serializer">
+					<action method="initSerializerBlock">
+						<grid_block_name>product.edit.tab.sort</grid_block_name>
+						<data_callback>getSelectedSorts</data_callback>
+						<hidden_input_name>sorts</hidden_input_name>
+						<reload_param_name>product_sorts</reload_param_name>
+					</action>
+					<action method="addColumnInputName">
+						<input_name>position</input_name>
+					</action>
+				</reference>
+			</block>
+		</block>
+	</adminhtml_ajaxproductsort_sort_catalog_product_sorts>
+	<adminhtml_ajaxproductsort_sort_catalog_product_sortsgrid>
+		<block type="core/text_list" name="root" output="toHtml">
+			<block type="ajaxproductsort/adminhtml_catalog_product_edit_tab_sort" name="product.edit.tab.sort"/>
+		</block>
+	</adminhtml_ajaxproductsort_sort_catalog_product_sortsgrid>
+	<adminhtml_ajaxproductsort_sort_products>
+		<block type="core/text_list" name="root" output="toHtml">
+			<block type="ajaxproductsort/adminhtml_sort_edit_tab_product" name="sort.edit.tab.product"/>
+			<block type="adminhtml/widget_grid_serializer" name="product_grid_serializer">
+				<reference name="product_grid_serializer">
+					<action method="initSerializerBlock">
+						<grid_block_name>sort.edit.tab.product</grid_block_name>
+							<data_callback>getSelectedProducts</data_callback>
+							<hidden_input_name>products</hidden_input_name>
+							<reload_param_name>sort_products</reload_param_name>
+					</action>
+					<action method="addColumnInputName">
+						<input_name>position</input_name>
+					</action>
+				</reference>
+			</block>
+		</block>
+	</adminhtml_ajaxproductsort_sort_products>
+	<adminhtml_ajaxproductsort_sort_productsgrid>
+		<block type="core/text_list" name="root" output="toHtml">
+			<block type="ajaxproductsort/adminhtml_sort_edit_tab_product" name="sort.edit.tab.product"/>
+		</block>
+	</adminhtml_ajaxproductsort_sort_productsgrid>
+</layout>

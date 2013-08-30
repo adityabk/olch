@@ -1,0 +1,76 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<!--
+<div class="footer-container">
+    <div class="footer">
+        <?php echo $this->getChildHtml() ?>
+        <p class="bugs"><?php echo $this->__('Help Us to Keep Magento Healthy') ?> - <a href="http://www.magentocommerce.com/bug-tracking" onclick="this.target='_blank'"><strong><?php echo $this->__('Report All Bugs') ?></strong></a> <?php echo $this->__('(ver. %s)', Mage::getVersion()) ?></p>
+        <address><?php $this->getCopyright() ?></address>
+    </div>
+</div> -->
+
+
+
+<div class="footer grid">
+<div class="blog">
+<ul>
+<li><a href="#">BLOG</a></li>
+<li><a href="#">STORES </a></li>
+<li><a href="#">CONTACT</a></li>
+</ul>
+<div class="mailing">
+<h6><a href="#">MAILING LIST</a></h6>
+</div>
+<div class="e-mail">
+<input type="text" name="name" value="EMAIL" onFocus="javascript:if(this.value=='EMAIL'){this.value='';}" onBlur="javascript:if(this.value==''){ this.value='EMAIL'; }" class="s" />
+</div>
+<div class="join_sec">
+<input type="submit" class="join" name="ok" value="JOIN">
+</div>
+</div>
+<div class="social-icons">
+<div class="mailing">
+<h6><a href="#">FOLLOW US</a></h6>
+</div>
+<div class="footer-social-icons">
+<a class="facebook" href="#"></a>
+<a class="twitter" href="#"></a>
+<a class="p-icon" href="#"></a>
+<a class="t-icon" href="#"></a>
+<a class="mess-icon" href="#"></a>
+</div>
+</div>
+<div class="terms">
+<div class="mailing">
+<h6><a href="#">TERMS AND CONDITIONS</a></h6>
+</div>
+<div class="mailing copy">
+<h6 class="copy"><a href="#">&copy; Alexander Olch All Rights Reserved</a></h6>
+</div>
+</div>
+
+</div>

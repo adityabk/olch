@@ -1,0 +1,306 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js'); ?>themejs/viewproduct.js"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js'); ?>themejs/slider.css"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js'); ?>themejs/thumbnail-slider.js"></script>
+
+
+
+
+
+
+
+
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+
+
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+    
+<div id="page" class="grid">
+  
+   
+<div class="bread-crum">
+    <div class="breadcrumbs">
+    <ul>        
+        <?php 
+        $product = Mage::registry('current_product');
+        $categoryIds = $product->getCategoryIds();
+        $category = Mage::getModel('catalog/category')->load($categoryIds[0]);
+        //echo $catId;
+        //$category = Mage::getModel('catalog/category')->load('37'); 
+        ?>
+     <li class="neckties">
+      <a class="active" title="" href="#"><? echo $category->getName();   ?></a>
+      
+     </li>
+      <li class="purple">
+      <a class="active" title="" href="#"><?php echo $_product->getAttributeText('color'); ?></a>
+     </li>
+     
+     <li class="cotton">
+       <a class="active" title="" href="#"><?php echo $_product->getAttributeText('material_season'); ?></a> 
+      </li>  
+            </ul>
+</div>
+</div>
+
+  
+ <div class="product">
+       <div class="product-zoom">
+            <?php echo $this->getChildHtml('media') ?>
+        </div>
+
+     <div class="product-cont">
+<h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                   <?php if ($_product->getShortDescription()):?>                
+                    <span class="cost"><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></span>
+                    <?php endif;?>
+<span class="cost">2.75 wide, 58" long<br>
+Navy / Black</span>
+<span class="cost">Stock No. <?php echo $_helper->productAttribute($_product, nl2br($_product->getSku()), 'sku') ?></span>
+<h1 class="cost-pay"><?php echo trim(strip_tags($this->getPriceHtml($_product, true))); ?></h1>
+
+<!--
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js'); ?>themejs/cufon.js">
+</script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js'); ?>themejs/affUI.js">
+</script>-->
+
+<link href="<?php echo $this->getSkinUrl('css/droppp.css'); ?>" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="http://192.168.1.28/olch_magento/js/cufon.js"></script>	
+<script type="text/javascript" src="http://192.168.1.28/olch_magento/js/affUI.js"></script>
+
+<script>
+	$.noConflict();
+	
+	
+</script>
+<div id="book-your-stay" class="shadow" style=" padding-top: 0;width: auto; margin:0 8px;">
+<select name="internationalprovince" id="internationalprovince" onChange="getinterNatCountries(this.value)">
+<option value="">SIZE</option>			
+<option  value="Africa">SMALL</option>
+<option  value="Australia">MEDIUM</option>  
+<option  value="Asia">LARGE </option>                                
+</select>&nbsp;&nbsp;&nbsp;&nbsp;
+<script>
+function getinterNatCountries(myval){
+    alert(myval);
+}
+</script>    
+
+<div class="sort-container">
+<form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <div class="no-display">
+            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+            <input type="hidden" name="related_product" id="related-products-field" value="" />
+        </div>
+    <div class="qty">
+<label for="Email-Address">QTY</label>
+
+ <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo ($this->getMinimalQty($_product)?$this->getMinimalQty($_product):1) ?>"  class="username input-text qty"/>
+</div>
+</div>
+</div>
+
+
+<!--
+<div class="sort-container">
+ <ul class="sort-product">
+    <li class="size"><a href="#">SIZE<br><span>SMALL</span></a> </li>
+   
+    </ul>
+      <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <div class="no-display">
+            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+            <input type="hidden" name="related_product" id="related-products-field" value="" />
+        </div>
+        
+    <div class="qty">
+<label for="Email-Address">QTY</label>
+
+ <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo ($this->getMinimalQty($_product)?$this->getMinimalQty($_product):1) ?>"  class="username input-text qty"/>
+</div>
+</div> -->
+
+
+ <?php if($_product->isSaleable()): ?>
+<div class="checkout">
+    <input name="" type="submit" value="ADD TO CART">
+</div>
+                        <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
+                          <!--  <span class="or"><?php echo $this->__('OR') ?></span>-->
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    
+</form>
+  <script type="text/javascript">
+    //<![CDATA[
+        var productAddToCartForm = new VarienForm('product_addtocart_form');
+        productAddToCartForm.submit = function(button, url) {
+            if (this.validator.validate()) {
+                var form = this.form;
+                var oldUrl = form.action;
+
+                if (url) {
+                   form.action = url;
+                }
+                var e = null;
+                try {
+                    this.form.submit();
+                } catch (e) {
+                }
+                this.form.action = oldUrl;
+                if (e) {
+                    throw e;
+                }
+
+                if (button && button != 'undefined') {
+                    button.disabled = true;
+                }
+            }
+        }.bind(productAddToCartForm);
+
+        productAddToCartForm.submitLight = function(button, url){
+            if(this.validator) {
+                var nv = Validation.methods;
+                delete Validation.methods['required-entry'];
+                delete Validation.methods['validate-one-required'];
+                delete Validation.methods['validate-one-required-by-name'];
+                // Remove custom datetime validators
+                for (var methodName in Validation.methods) {
+                    if (methodName.match(/^validate-datetime-.*/i)) {
+                        delete Validation.methods[methodName];
+                    }
+                }
+
+                if (this.validator.validate()) {
+                    if (url) {
+                        this.form.action = url;
+                    }
+                    this.form.submit();
+                }
+                Object.extend(Validation.methods, nv);
+            }
+        }.bind(productAddToCartForm);
+    //]]>
+    </script>
+<div class="mailing">
+<h6><a href="#">share on</a></h6>
+</div>
+<div class="footer-social-icons">
+<a class="facebook" href="#"></a>
+<a class="twitter" href="#"></a>
+<a class="p-icon" href="#"></a>
+<a class="t-icon" href="#"></a>
+<a class="mess-icon" href="#"></a>
+</div>
+
+<div class="mailing">
+<h6 class="add-to-list"> <?php echo $this->getChildHtml('addto') ?></h6>
+</div>
+</div>      
+     
+     
+     
+   </div> 
+   <div class="related-items">
+<div class="border"></div>
+<h3><a href="#">RELATED ITEMS</a></h3>
+<div class="border-right"></div>
+<div id="example">
+<div id="slides" class="slides">
+<div id="mcts1">
+<?php
+$relatedProductsId=$_product->getRelatedProductIds();
+    $relatedProducts=array();
+     $i=0;      
+    foreach($relatedProductsId as $relatedProductId) {  
+    $_relatedproducts=Mage::getModel('catalog/product')->load($relatedProductId);
+   // print_r($_relatedproducts);
+     ?>
+<img src="<?php echo $this->helper('catalog/image')->init($_relatedproducts, 'thumbnail')->resize(50) ?>" alt="item1">
+ <?php  $i++; }?>
+ 
+  </div>
+
+
+        
+
+
+</div>
+    
+    
+</div>
+</div>
+
+   </div>
+   <div class="pro-popup-img" id="pro-box-img">
+<!-- <a href="#" class="close" id="close1">CLOSE X</a>  -->
+<div class="product-zoom-in">
+<div id="dhtmlgoodies_slideshow">
+	<div id="galleryContainer">
+<?php $_images = Mage::getModel('catalog/product')->load($_product->getId())->getMediaGalleryImages(); ?>		
+		<span class="reviwes">MORE VIEWS</span>
+		<div id="theImages">
+			<div>
+			
+			<?php
+			//echo count($_images)."dsfs";
+			 if (count($_images) > 0): ?>
+			<?php $i=0; foreach ($_images as $_image): $i++; ?>
+			<?php $largeimg = $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->resize(539); ?>
+			<a class="active" href="#" onClick="showPreviewpopup('<?php echo $largeimg; ?>','<?php echo $i; ?>');return false"><img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'thumbnail', $_image->getFile())->resize(56); ?>" alt="tye"></a>	
+			<?php endforeach; ?>
+			<?php endif; ?>
+						
+			<div id="slideEnd"></div>
+			</div>
+		</div>
+	</div>
+    <div id="previewPanepopup">
+		<img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->resize(730); ?>" alt="tye">	
+		<span id="waitMessage">Loading image. Please wait</span>
+		<div id="largeImageCaption"></div>
+        <span id="close">close</span>
+	</div>
+</div>
+</div>
+</div>
+

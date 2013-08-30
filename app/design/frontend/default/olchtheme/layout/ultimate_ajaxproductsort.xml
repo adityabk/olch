@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Ultimate_AjaxProductSort extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category   	Ultimate
+ * @package		Ultimate_AjaxProductSort
+ * @copyright  	Copyright (c) 2013
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+<layout>
+	<default>
+		<reference name="footer_links">
+			<action method="addLink" translate="label title" module="ajaxproductsort">
+				<label>Sort</label>
+				<url helper="ajaxproductsort/getSortsUrl" />
+				<title>Sort</title>
+				<prepare />
+				<urlParams/>
+				<position>120</position>
+			</action>
+		</reference>
+	</default>
+	<ajaxproductsort_sort_index translate="label" module="ajaxproductsort">
+		<label>Sort list</label>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+		</reference>		
+		<reference name="content">
+			<block type="ajaxproductsort/sort_list" name="sort_list" template="ultimate_ajaxproductsort/sort/list.phtml" />
+		</reference>
+	</ajaxproductsort_sort_index>
+	<ajaxproductsort_sort_view translate="label" module="ajaxproductsort">
+		<label>Sort view page</label>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+		</reference>
+		<reference name="content">
+			<block type="ajaxproductsort/sort_view" name="sort_view" template="ultimate_ajaxproductsort/sort/view.phtml" />
+			<block type="ajaxproductsort/sort_catalog_product_list" name="sort.info.products" as="sort_products" template="ultimate_ajaxproductsort/sort/catalog/product/list.phtml" />
+		</reference>
+	</ajaxproductsort_sort_view>
+	<ajaxproductsort_sort_rss translate="label" module="ajaxproductsort">
+		<label>Sort rss feed</label>
+		<block type="ajaxproductsort/sort_rss" output="toHtml" name="ajaxproductsort.sort.rss" />
+	</ajaxproductsort_sort_rss>
+	<rss_index_index>
+		<reference name="content">
+			<block type="ajaxproductsort/rss" name="ajaxproductsort.rss" template="ultimate_ajaxproductsort/rss.phtml">
+				<action method="addFeed" ifconfig="ajaxproductsort/sort/rss" translate="label" module="ajaxproductsort">
+					<label>Sort</label>
+					<url helper="ajaxproductsort/sort/getRssUrl" />
+				</action>
+			</block>
+		</reference>
+	</rss_index_index>
+	<catalog_product_view>
+		<reference name="product.info">
+			<block type="ajaxproductsort/catalog_product_list_sort" name="product.info.sorts" as="product_sorts" template="ultimate_ajaxproductsort/catalog/product/list/sort.phtml">
+				<action method="addToParentGroup"><group>detailed_info</group></action>
+				<action method="setTitle" translate="value" module="ajaxproductsort"><value>Sort</value></action>
+			</block>
+		</reference>
+	</catalog_product_view>
+</layout>

@@ -1,0 +1,245 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * @var Mage_Page_Block_Html_Header $this
+ */
+/*?>
+<div class="header-container">
+    <div class="header">
+        <?php if ($this->getIsHomePage()):?>
+        <h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
+        <?php else:?>
+        <a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a>
+        <?php endif?>
+        <div class="quick-access">
+            <?php echo $this->getChildHtml('topSearch') ?>
+            <p class="welcome-msg"><?php echo $this->getWelcome() ?> <?php echo $this->getAdditionalHtml() ?></p>
+            <?php echo $this->getChildHtml('topLinks') ?>
+            <?php echo $this->getChildHtml('store_language') ?>
+        </div>
+        <?php echo $this->getChildHtml('topContainer'); ?>
+    </div>
+</div>
+<?php echo $this->getChildHtml('topMenu') */?>
+
+
+<script type="text/javascript">
+jQuery(function(){ 
+
+// Check the initial Poistion of the Sticky Header
+var stickyHeaderTop = jQuery('#stickyalias').offset().top;
+ 
+jQuery(window).scroll(function(){ 
+  
+        			   
+if( jQuery(window).scrollTop() > stickyHeaderTop ) {  
+var img = jQuery("#logo h1 img");   
+jQuery('#logo').stop().animate({marginTop: "-10px",marginBottom: "0"}); 
+ jQuery('#module-header').stop().animate({height: "92px"}); 
+  jQuery('#main').stop().animate({paddtinTop: "130px"});
+ jQuery('#logo h1 img').stop().animate({height: "40px", width: "220px"},
+            {
+            step: function(now, fx) {
+                jQuery('#logo h1 img').css("margin-left","+=0.076");
+                jQuery('#logo h1 img').css("margin-right","+=0.084");
+                jQuery('#logo h1 img').css("margin-bottom","+=0.152");
+            }
+        },1); 
+} else {  
+var img = jQuery("#logo h1 img");
+jQuery('#logo').stop().animate({marginTop: "46px",marginBottom: "33px"}); 
+jQuery('#module-header').stop().animate({height: "190px"});
+ jQuery('#main').stop().animate({paddtinTop: "190px"});  
+ jQuery('#logo h1 img').stop().animate({height: "49px", width: "270px"},
+            {
+            step: function(now, fx) {
+                jQuery('#logo h1 img').css("margin-left","+=0.076");
+                jQuery('#logo h1 img').css("margin-right","+=0.084");
+                jQuery('#logo h1 img').css("margin-bottom","+=0.152");
+            }
+        },1); 
+ 
+}
+});
+});
+</script>
+
+
+ 
+<link rel="stylesheet" media="all and (max-device-width: 960px)" href="<?php echo $this->getSkinUrl('css/ipad.css') ; ?>">
+<link rel="stylesheet" media="all and (max-device-width: 640px)" href="<?php echo $this->getSkinUrl('css/iphone.css') ; ?>">
+
+<div class="module-header" id="module-header">
+<div id="head" class="grid" role="banner">
+    <div class="middle-container">
+  <div id="tophead" class="grid-12">
+  <div id="newsletter">
+  <ul>
+  <li><a href="<?php echo $this->getUrl() ?>" target="_parent" >SHOP</a></li>
+  <li>BLOG</li>
+  
+  
+  </ul>
+  
+  </div>
+  <nav id="account" class="sm-caps" role="navigation">
+    <ul class="links">
+      <li class="first" >
+          
+          
+<?php
+$totalItems = Mage::getModel('checkout/cart')->getQuote()->getItemsCount();
+$totalQuantity = Mage::getModel('checkout/cart')->getQuote()->getItemsQty();
+$subTotal = Mage::getModel('checkout/cart')->getQuote()->getSubtotal();
+$grandTotal = Mage::helper('checkout')->formatPrice(Mage::getModel('checkout/cart')->getQuote()->getGrandTotal());
+
+if($totalItems < 1){$totalItems = 0;}
+?>
+          
+         
+          <a href="#" id="btn-shopping-bag-0" class="top-link-cart active">Shopping Bag [<?php echo $totalItems; ?>] </a>
+<?php
+               //echo $this->getChildHtml('topcart'); 
+          ?>
+                    <aside id="minicart" class="grid-14 omega">
+                        
+                        <div class="shopping-items">
+                        <div class="total-times">
+
+                        <div class="sub-total"></div>
+                        <div class="selected-products">
+
+<?php
+
+$items = Mage::getSingleton('checkout/session')->getQuote()->getAllItems(); 
+                         
+foreach($items as $item) :
+    $image =    Mage::helper('catalog/image')->init($item->getProduct(), 'thumbnail')->resize(56, 56);
+   
+    $pId = $item->getProductId();
+    $pName = $item->getName();
+    $pSKU = $item->getSku();
+    $pQty = $item->getQty();
+    
+    
+    
+    $pPrice = Mage::helper('checkout')->formatPrice($item->getPrice());    
+    
+    $_product = Mage::getModel('catalog/product')->load($pId);
+    if($_product->getStatus()==1){
+    $_categories = $_product->getCategoryIds();
+   $_category = Mage::getModel('catalog/category')->load($_categories[0]);
+   $url = $this->getUrl($_category->getUrlPath()).$_product->getUrlPath();
+    }
+   
+    $delUrl = Mage::getUrl( 'checkout/cart/delete', array( 'id' => $item->getId() ) );
+?>    
+<div class="s-product">
+                        <div class="item-img"><img src="<?php echo $image; ?>"  alt="<?php echo $pName; ?>"></div>
+                        <div class="item-des">
+                        <div class="item-name"><?php echo $pName; ?><br>
+                    <span class="small">QTY <?php echo $pQty; ?> </span>
+                    <span class="small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $pPrice; ?> </span> </div>
+
+                    </div>
+                        <div class="item-close"><img src="<?php echo $this->getSkinUrl('images/close-img.jpg') ; ?>" width="7" height="7" alt="close"></div>
+                        </div>
+ <?php endforeach; ?>
+  <input type="hidden" name="pid" id="pid" value="">                        
+                            
+     </div>
+                        <div class="checkout">
+<form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">                 
+
+<input name="" type="submit" value="Checkout"   >
+
+
+</form>                        
+                        <span class="small-1">TOTAL </span><br><span class="small-1"><?php echo $grandTotal; ?></span></div>
+                        </div>
+                        </div>                       
+                        
+
+                      </aside>    
+
+        
+      </li>
+      <li class="third"> <a href="#" id="contact-0" target="_parent" >CONTACT </a></li>
+      <li class="second"> 
+
+  
+          
+          <?php if (! Mage::getSingleton('customer/session')->isLoggedIn()): ?>
+          
+<?php
+  
+if($_SERVER['SCRIPT_URL'] == '/tumblrheader'){
+?>
+          <a href="<?php echo Mage::helper('customer')->getLoginUrl(); ?>" target="_parent" id="btn-log-in"><?php echo $this->__('LOGIN') ?></a>
+<?php          
+}else{
+   
+?>
+          
+<a href="<?php echo Mage::helper('customer')->getLoginUrl(); ?>"  target="_parent" id="btn-log-in"><?php echo $this->__('LOGIN') ?></a>
+
+<aside id="minilogin" class="grid-14 omega">                       
+<?php echo $this->getChildHtml('mini_login') ?>
+</aside>
+<?php } ?>
+<?php else: ?>
+<a href="<?php echo Mage::helper('customer')->getLogoutUrl(); ?>" target="_parent" id="btn-log-out"><?php echo $this->__('LOGOUT') ?></a>
+<?php endif; ?>
+
+      </li>
+    </ul>
+  </nav>
+  
+
+  </div>
+    
+  <hgroup id="logo" class="grid-12" style="margin-top:46px; margin-bottom:33px;">
+    <h1> <a href="<?php echo $this->getUrl() ?>"><img src="<?php echo $this->getSkinUrl('images/logo.jpg') ; ?>" alt="ALEXANDER OLCH" target="_parent" /> </a></h1>
+  </hgroup>
+  <div id="headbtm" class="grid-12">
+  
+  <form id="search-form" action="%20" method="get">
+    <input id="search" type="text" name="q" value="" class="short right" />
+    <div id="search_autocomplete" class="search-autocomplete"></div>
+    <script type="text/javascript"> 
+var searchForm = new Varien.searchForm('search-form', 'search', '');
+</script>
+  </form></div>
+</div>
+    <div id="stickyalias"></div>
+    </div>
+    
+    
+
+
+
+    
+</div>

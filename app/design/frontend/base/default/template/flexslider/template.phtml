@@ -1,0 +1,313 @@
+<?php
+/**
+ * @category	Solide Webservices
+ * @package		Flexslider
+ */
+?>
+
+<?php if ($this->hasValidGroup()):
+
+	$group_collection = $this->_getCollection();
+	
+
+	foreach ($group_collection as $group):
+		$slides = $this->getSlides($group['group_id']);
+		$youtubeVideos = '';
+		$vimeoVideos = '';
+		
+		if($this->helper('flexslider')->isjQueryEnabled()){
+			$jquerySelector = 'solide';
+		} else {
+			$jquerySelector = 'jQuery';
+		}
+
+		if (count($slides) > 0):
+
+			if($group['width']) { ?>
+				<div class="flexslider-width" style="max-width: <?php echo $group['width'] ?>px !important;">
+			<?php } ?>
+
+					<?php if($group['nav_position']=='outside') { ?>
+						<div id="<?php echo $group['code'] ?>-nav-container">
+					<?php } ?>
+
+							<div class="sw-flexslider-element <?php echo $group['code'] ?>-container">
+
+								<?php if($group['type']!='carousel') { ?>
+									<div class="sw-flexslider-container loading">
+										<div id="flexslider-<?php echo $group['code'] ?>" class="sw-flexslider flexslider-<?php echo $group['code'] ?>">
+											<ul class="slides">
+												<?php foreach($slides as $slide): ?>
+													<?php if($slide['slidetype']=='youtube') { ?>
+														<?php $youtubeVideos = $youtubeVideos + 1; ?>													
+														<li class="video">
+															<iframe class="youtube" id="ytplayer<?php echo $youtubeVideos ?>" src="http://www.youtube.com/embed/<?php echo $slide['video_id'] ?>?enablejsapi=1&amp;wmode=opaque&amp;playerapiid=ytplayer<?php echo $youtubeVideos ?>" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+														</li>													
+													<?php } elseif($slide['slidetype']=='vimeo') { ?>
+														<?php $vimeoVideos = $vimeoVideos + 1; ?>
+														<li class="video">
+															<iframe class="vimeo" id="player_<?php echo $vimeoVideos ?>" src="http://player.vimeo.com/video/<?php echo $slide['video_id'] ?>?api=1&amp;player_id=player_<?php echo $vimeoVideos ?>" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+														</li>
+													<?php } else { ?>
+														<li class="image">
+															<?php if($slide->hasUrl()) { ?>
+																<a href="<?php echo $slide->getUrl() ?>" title="<?php echo $this->escapeHtml($slide->getTitle()) ?>" target="<?php echo $this->escapeHtml($slide->getUrlTarget()) ?>">
+															<?php } ?>
+																<?php if($slide->getImageUrl()) { ?>
+																	<img src="<?php echo $slide->getImageUrl() ?>" alt="<?php echo $this->escapeHtml($slide->getAltText()) ?>" />
+																<?php } ?>
+															<?php if($slide->hasUrl()) { ?>
+																</a>
+															<?php } ?>
+															<?php if($slide->getHtml()) { ?><span class="slider-title"><?php echo $slide->getHtml() ?></span><?php } ?>
+														</li>
+													<?php } ?>
+												<?php endforeach ?>
+											</ul>
+										</div>
+									</div>
+								<?php } ?>
+
+								<?php if($group['type']=='carousel') { ?>
+									<div class="sw-flexslider-container loading">
+										<div id="carousel-<?php echo $group['code'] ?>" class="sw-flexslider carousel flexslider-<?php echo $group['code'] ?>">
+											<ul class="slides">
+												<?php foreach($slides as $slide): ?>
+													<?php if($slide['slidetype']=='youtube') { ?>													
+														<li class="video-thumbnail">
+															<a href="http://www.youtube.com/watch?v=<?php echo $slide['video_id'] ?>" title="<?php echo $this->escapeHtml($slide->getTitle()) ?>" target="_blank">
+																<img src="http://img.youtube.com/vi/<?php echo $slide['video_id'] ?>/0.jpg" alt="<?php echo $this->escapeHtml($slide->getTitle()) ?>" />
+															</a>
+														</li>													
+													<?php } elseif($slide['slidetype']=='vimeo') { ?>
+														<?php
+															$img = $slide['video_id'];
+															$hash = unserialize(file_get_contents("http://vimeo.com/api/v2/video/$img.php"));
+														?>
+														<li class="video-thumbnail">
+															<a href="http://vimeo.com/<?php echo $slide['video_id'] ?>" title="<?php echo $this->escapeHtml($slide->getTitle()) ?>" target="_blank">
+																<img src="<?php echo $hash[0]['thumbnail_large']; ?>" alt="<?php echo $this->escapeHtml($slide->getTitle()) ?>" />
+															</a>
+														</li>
+													<?php } else { ?>
+														<li>
+															<?php if($slide->hasUrl()) { ?>
+																<a href="<?php echo $slide->getUrl() ?>" title="<?php echo $this->escapeHtml($slide->getTitle()) ?>" target="<?php echo $this->escapeHtml($slide->getUrlTarget()) ?>">
+															<?php } ?>
+																	<?php if($slide->getThumbUrl()) { ?>
+																		<img src="<?php echo $slide->getThumbUrl() ?>" alt="<?php echo $this->escapeHtml($slide->getAltText()) ?>" />
+																	<?php } ?>
+															<?php if($slide->hasUrl()) { ?>
+																</a>
+															<?php } ?>
+														</li>
+													<?php } ?>
+												<?php endforeach ?>
+											</ul>
+										</div>
+									</div>
+								<?php } ?>
+								
+								<?php if($group['type']=='basic-carousel') { ?>
+									<div class="sw-flexslider-container">
+										<div id="carousel-<?php echo $group['code'] ?>" class="sw-flexslider carousel flexslider-<?php echo $group['code'] ?>">
+											<ul class="slides">
+												<?php foreach($slides as $slide): ?>
+													<?php if($slide['slidetype']=='youtube') { ?>													
+														<li class="video-thumbnail">
+															<img src="http://img.youtube.com/vi/<?php echo $slide['video_id'] ?>/0.jpg" alt="<?php echo $this->escapeHtml($slide->getTitle()) ?>" />
+														</li>													
+													<?php } elseif($slide['slidetype']=='vimeo') { ?>
+														<?php
+															$img = $slide['video_id'];
+															$hash = unserialize(file_get_contents("http://vimeo.com/api/v2/video/$img.php"));
+														?>
+														<li class="video-thumbnail">
+															<img src="<?php echo $hash[0]['thumbnail_large']; ?>" alt="<?php echo $this->escapeHtml($slide->getTitle()) ?>" />
+														</li>
+													<?php } else { ?>
+														<li>
+															<?php if($slide->getThumbUrl()) { ?>
+																<img src="<?php echo $slide->getThumbUrl() ?>" alt="<?php echo $this->escapeHtml($slide->getAltText()) ?>" />
+															<?php } ?>
+														</li>
+													<?php } ?>
+												<?php endforeach ?>
+											</ul>
+										</div>
+									</div>
+								<?php } ?>
+
+							</div>
+
+					<?php if($group['nav_position']=='outside') { ?>
+						</div>
+					<?php } ?>
+
+					<?php if($group['type']!='basic') { ?>
+						<script type="text/javascript">
+							<?php echo $jquerySelector; ?>(window).load(function() {
+								<?php echo $jquerySelector; ?>('#carousel-<?php echo $group['code'] ?>').flexslider({
+									namespace: 				"sw-flexslider-",
+									animation: 				"slide",
+									itemWidth: 				<?php echo $group['thumbnail_size'] ?>,
+									itemMargin: 			5,
+									<?php if($group['type']=='basic-carousel') { ?>
+										slideshow: 			false,
+										animationLoop: 		false,
+										controlNav: 		false,
+										asNavFor: 			'#flexslider-<?php echo $group["code"] ?>'
+									<?php } else { ?>
+										slideshow: 				<?php if($group['slider_auto']==0) { echo 'false'; } else { echo 'true'; } ?>,
+										animationLoop:			<?php if($group['slider_animationloop']==0) { echo 'false'; } else { echo 'true'; } ?>,
+										controlNav: 			<?php if($group['pagination_show']=='no' || $group['type']=='carousel' || $group['type']=='basic-carousel') { echo 'false'; } else { echo 'true'; } ?>,
+									<?php } ?>
+									start: function(slider){
+										<?php echo $jquerySelector; ?>('.sw-flexslider-container').removeClass('loading');
+									},
+								});
+							});
+						</script>
+					<?php } ?>
+
+					<?php if($group['type']!='carousel') { ?>
+						<script type="text/javascript">
+
+							// FLEXSLIDER
+							<?php echo $jquerySelector; ?>(window).load(function() {
+								
+								<?php echo $jquerySelector; ?>('#flexslider-<?php echo $group['code'] ?>').fitVids().flexslider({
+									namespace: 				"sw-flexslider-",
+									directionNav: 			<?php if($group['nav_show']=='no') { echo 'false'; } else { echo 'true'; } ?>,
+									controlNav: 			<?php if($group['pagination_show']=='no' || $group['type']=='carousel' || $group['type']=='basic-carousel') { echo 'false'; } else { echo 'true'; } ?>,
+									slideshow: 				<?php if($group['slider_auto']==0) { echo 'false'; } else { echo 'true'; } ?>,
+									animationLoop:			<?php if($group['slider_animationloop']==0) { echo 'false'; } else { echo 'true'; } ?>,
+									pauseOnAction: 			<?php if($group['slider_pauseonaction']==0) { echo 'false'; } else { echo 'true'; } ?>,
+									pauseOnHover: 			<?php if($group['slider_pauseonhover']==0) { echo 'false'; } else { echo 'true'; } ?>,
+									animation: 				"<?php echo $group['slider_animation'] ?>",
+									animationSpeed: 		<?php echo $group['slider_aniduration'] ?>,
+									direction: 				"<?php echo $group['slider_direction'] ?>",
+									slideshowSpeed: 		<?php echo $group['slider_slideduration'] ?>,
+									randomize: 				<?php if($group['slider_random']==0) { echo 'false'; } else { echo 'true'; } ?>,
+									smoothHeight: 			<?php if($group['slider_smoothheight']==0) { echo 'false'; } else { echo 'true'; } ?>,
+									controlsContainer: 		".flex-nav-container",
+									<?php if($group['type']=='basic-carousel') { ?>
+										sync: '#carousel-<?php echo $group['code'] ?>',
+									<?php } ?>
+									<?php if($youtubeVideos || $vimeoVideos) { ?>
+										video: 	true,
+									<?php } ?>
+									start: function(slider){
+										<?php echo $jquerySelector; ?>('.sw-flexslider-container').removeClass('loading');
+										<?php switch($group['theme']) {
+											case "default": ?>
+												<?php echo $jquerySelector; ?>(".sw-flexslider .slides .slider-title").delay(400).animate({right:'0'}, 800);
+												<?php break;
+											case "woothemes": ?>
+												<?php echo $jquerySelector; ?>(".sw-flexslider .slides .slider-title").delay(400).animate({bottom:'0'}, 800);
+												<?php break;	
+										} ?>
+									},
+									before: function(slider) {
+										<?php switch($group['theme']) {
+											case "default": ?>
+												<?php echo $jquerySelector; ?>(".sw-flexslider .slides .slider-title").css({right: '-60%'});
+												<?php break;
+											case "woothemes": ?>
+												<?php echo $jquerySelector; ?>(".sw-flexslider .slides .slider-title").css({bottom: '-50%'});
+												<?php break;
+										} ?>
+										<?php if($youtubeVideos) { ?>
+											if (slider.slides.eq(slider.currentSlide).find('iframe.youtube').length !== 0) {
+												currentVideo = slider.slides.eq(slider.currentSlide).find('iframe.youtube').attr('id');
+												pauseVideo(currentVideo);
+											}
+										<?php } ?>
+										<?php if($vimeoVideos) { ?>
+											if (slider.slides.eq(slider.currentSlide).find('iframe.vimeo').length !== 0) {
+												$f(slider.slides.eq(slider.currentSlide).find('iframe.vimeo').attr('id') ).api('pause');
+											}
+										<?php } ?>
+									},
+									after: function(slider) {
+										<?php switch($group['theme']) {
+											case "default": ?>
+												<?php echo $jquerySelector; ?>(".sw-flexslider .slides .slider-title").delay(400).animate({right:'0'}, 800);
+												<?php break;
+											case "woothemes": ?>
+												<?php echo $jquerySelector; ?>(".sw-flexslider .slides .slider-title").delay(400).animate({bottom:'0'}, 800);
+												<?php break;
+										} ?>
+									},
+								});
+							});
+
+							<?php if($youtubeVideos) { ?>
+								// YOUTUBE VIDEO STUFF FOR CONTROL
+								var tag = document.createElement('script');
+								tag.src = "https://www.youtube.com/iframe_api";
+								var firstScriptTag = document.getElementsByTagName('script')[0];
+								firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+								var players = {};
+								function onYouTubeIframeAPIReady() {
+									<?php echo $jquerySelector; ?>(document).ready(function() { 
+										<?php echo $jquerySelector; ?>('li.video iframe.youtube').each(function(event) {
+											var iframeID = <?php echo $jquerySelector; ?>(this).attr('id');
+											players[iframeID] = new YT.Player(iframeID, {
+												events: {
+													'onStateChange': onPlayerStateChange
+												}
+											});
+										
+										});
+									}); 
+								}
+
+								function onPlayerStateChange(event) {
+									if (event.data === 1) {
+										<?php echo $jquerySelector; ?>('#flexslider-<?php echo $group['code'] ?>').flexslider("pause");
+									} else if (event.data === 2) {
+										<?php echo $jquerySelector; ?>('#flexslider-<?php echo $group['code'] ?>').flexslider("play");
+									} else if (event.data === 0) {
+										<?php echo $jquerySelector; ?>('#flexslider-<?php echo $group['code'] ?>').flexslider("play");
+									}
+								}
+								
+								function pauseVideo(currentVideo) {
+									players[currentVideo].pauseVideo();
+								}
+							<?php } ?>
+
+							<?php if($vimeoVideos) { ?>
+								// VIMEO VIDEO STUFF FOR CONTROL
+								<?php echo $jquerySelector; ?>(document).ready(function() {
+									<?php echo $jquerySelector; ?>('li.video iframe.vimeo').each(function(){
+										var iframeID = <?php echo $jquerySelector; ?>(this).attr('id');
+										$f(iframeID).addEvent('ready', ready);
+									});
+								});
+
+								function ready(player_id){
+									$f(player_id).addEvent('play', onPlay);
+									$f(player_id).addEvent('pause', onPause);
+									$f(player_id).addEvent('finish', onFinish);
+								}
+
+								function onPlay() {		<?php echo $jquerySelector; ?>('#flexslider-<?php echo $group['code'] ?>').flexslider("pause");	}
+								function onPause() {	<?php echo $jquerySelector; ?>('#flexslider-<?php echo $group['code'] ?>').flexslider("play");	}
+								function onFinish() {	<?php echo $jquerySelector; ?>('#flexslider-<?php echo $group['code'] ?>').flexslider("play");	}
+							<?php } ?>
+
+						</script>
+					<?php } ?>
+
+			<?php if($group['width']) { ?>
+				</div>
+			<?php }
+
+		endif;
+	endforeach;
+endif;
+
+?>

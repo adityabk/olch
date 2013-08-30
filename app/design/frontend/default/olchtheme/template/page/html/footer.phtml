@@ -1,0 +1,177 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<!--
+<div class="footer-container">
+    <div class="footer">
+        <?php echo $this->getChildHtml() ?>
+        <p class="bugs"><?php echo $this->__('Help Us to Keep Magento Healthy') ?> - <a href="http://www.magentocommerce.com/bug-tracking" onclick="this.target='_blank'"><strong><?php echo $this->__('Report All Bugs') ?></strong></a> <?php echo $this->__('(ver. %s)', Mage::getVersion()) ?></p>
+        <address><?php $this->getCopyright() ?></address>
+    </div>
+</div> -->
+
+
+
+<div class="footer grid" id="footer">
+<div class="blog">
+<ul>
+<li><a href="#">BLOG</a></li>
+<li><a href="#">STORES </a></li>
+<li><a href="<?php echo $this->getUrl('contacts')?>">CONTACT</a></li>
+</ul>
+    
+
+    
+<script type="text/javascript">
+function validemail(email){
+    if (echeck(email)==false){
+        document.getElementById('emailerror').innerHTML = " Enter Valid Email Address";
+        return false;
+    }
+   
+}
+
+function echeck(str) {
+	var at="@"
+	var dot="."
+	var lat=str.indexOf(at)
+	var lstr=str.length
+	var ldot=str.indexOf(dot)
+	if (str.indexOf(at)==-1){
+	   document.getElementById('emailerror').innerHTML = " Enter Valid Email Address";
+	   return false
+	}
+
+	if (str.indexOf(at)==-1 || str.indexOf(at)==0 || str.indexOf(at)==lstr){
+	   document.getElementById('emailerror').innerHTML = " Enter Valid Email Address";
+	   return false
+	}
+
+	if (str.indexOf(dot)==-1 || str.indexOf(dot)==0 || str.indexOf(dot)==lstr){
+	document.getElementById('emailerror').innerHTML = " Enter Valid Email Address";
+		return false
+	}
+
+	 if (str.indexOf(at,(lat+1))!=-1){
+	document.getElementById('emailerror').innerHTML = " Enter Valid Email Address";
+		return false
+	 }
+
+	 if (str.substring(lat-1,lat)==dot || str.substring(lat+1,lat+2)==dot){
+	document.getElementById('emailerror').innerHTML = " Enter Valid Email Address";
+		return false
+	 }
+
+	 if (str.indexOf(dot,(lat+2))==-1){
+	document.getElementById('emailerror').innerHTML = " Enter Valid Email Address";
+		return false
+	 }
+	
+	 if (str.indexOf(" ")!=-1){
+	document.getElementById('emailerror').innerHTML = " Enter Valid Email Address";
+		return false
+	 }
+
+	 return true					
+}
+</script>
+ 
+<div class="mailing">
+<h6><a href="#">MAILING LIST</a></h6>
+</div>    
+    <form name ="newsletter" action="<?php echo $this->getUrl('newsletter/subscriber/new') ?>" method="post" id="newsletter-validate-detail">
+
+        
+        
+        
+            <div class="e-mail">
+               <!--<input type="text" name="email" id="newsletter" placeholder="EMAIL" class="input-text required-entry validate-email" />-->
+               
+               <input type="text" name="email" id="newsletter" value="EMAIL" onFocus="javascript:if(this.value=='EMAIL'){this.value='';}" onBlur="javascript:if(this.value==''){ this.value='EMAIL'; }" class="input-text required-entry validate-email" />
+               
+            </div>        
+            <div class="join_sec">
+                <button type="submit" class="join">JOIN</button>
+            </div>
+        
+    </form>
+
+
+    <script type="text/javascript">
+    //<![CDATA[
+        var newsletterSubscriberFormDetail = new VarienForm('newsletter-validate-detail');
+    //]]>
+    </script>
+
+    
+
+    
+    
+</div>
+<div class="social-icons">
+<div class="mailing">
+<h6>FOLLOW US</h6>
+</div>
+<div class="footer-social-icons">
+<a class="facebook" href="https://www.facebook.com/AlexanderOlchNY"></a>
+<a class="twitter" href="https://twitter.com/alexanderolch"></a>
+<a class="p-icon" href="#"></a>
+<a class="t-icon" href="http://olch.tumblr.com/"></a>
+<a class="mess-icon" href="#"></a>
+</div>
+</div>
+<div class="terms">
+<div class="mailing">
+<h6><a href="#">TERMS AND CONDITIONS</a></h6>
+</div>
+<div class="mailing copy">
+<h6 class="copy">&copy; Alexander Olch All Rights Reserved</h6>
+</div>
+</div>
+
+</div>
+
+
+<?php
+//echo $_SERVER['REQUEST_URI'];
+if( ($_SERVER['REQUEST_URI'] =='/olch_magento/') || ($_SERVER['REQUEST_URI'] =='/olch_magento/index.php/') ){
+?>
+<div class="login-popup-img" id="login-box-img"  >
+
+    <div class="slide-pop-up">
+<div class="container1">
+<a href="#" class="close" id="close">X</a>  
+<div class="task-img">
+  <img src="<?php echo $this->getSkinUrl('images/pop-up-banner.jpg') ; ?>" alt="image"/>
+  
+  
+  </div>
+  
+</div>
+
+ </div>
+</div>
+<?php } ?>

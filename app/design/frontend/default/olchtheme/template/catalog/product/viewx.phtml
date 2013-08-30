@@ -1,0 +1,380 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<!--
+<div style="padding-left: 160px; padding-top: 186px; position: relative;">
+  
+    
+  
+ <div class="product-view">
+    <div class="product-essential">
+    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <div class="no-display">
+            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+            <input type="hidden" name="related_product" id="related-products-field" value="" />
+        </div>
+
+        <div class="product-shop">
+            <div class="product-name">
+                <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+            </div>
+
+            <?php if ($this->canEmailToFriend()): ?>
+                <p class="email-friend"><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to a Friend') ?></a></p>
+            <?php endif; ?>
+
+            <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
+            <?php echo $this->getChildHtml('alert_urls') ?>
+            <?php echo $this->getChildHtml('product_type_data') ?>
+            <?php echo $this->getTierPriceHtml() ?>
+            <?php echo $this->getChildHtml('extrahint') ?>
+
+            <?php if (!$this->hasOptions()):?>
+                <div class="add-to-box">
+                    <?php if($_product->isSaleable()): ?>
+                        <?php echo $this->getChildHtml('addtocart') ?>
+                        <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
+                            <span class="or"><?php echo $this->__('OR') ?></span>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    <?php echo $this->getChildHtml('addto') ?>
+                </div>
+                <?php echo $this->getChildHtml('extra_buttons') ?>
+            <?php elseif (!$_product->isSaleable()): ?>
+                <div class="add-to-box">
+                    <?php echo $this->getChildHtml('addto') ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($_product->getShortDescription()):?>
+                <div class="short-description">
+                    <h2><?php echo $this->__('Quick Overview') ?></h2>
+                    <div class="std"><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></div>
+                </div>
+            <?php endif;?>
+
+            <?php echo $this->getChildHtml('other');?>
+
+            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+                <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+            <?php endif;?>
+
+        </div>
+
+        <div class="product-img-box">
+            <?php echo $this->getChildHtml('media') ?>
+        </div>
+
+        <div class="clearer"></div>
+        <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+            <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+        <?php endif;?>
+    </form>
+    <script type="text/javascript">
+    //<![CDATA[
+        var productAddToCartForm = new VarienForm('product_addtocart_form');
+        productAddToCartForm.submit = function(button, url) {
+            if (this.validator.validate()) {
+                var form = this.form;
+                var oldUrl = form.action;
+
+                if (url) {
+                   form.action = url;
+                }
+                var e = null;
+                try {
+                    this.form.submit();
+                } catch (e) {
+                }
+                this.form.action = oldUrl;
+                if (e) {
+                    throw e;
+                }
+
+                if (button && button != 'undefined') {
+                    button.disabled = true;
+                }
+            }
+        }.bind(productAddToCartForm);
+
+        productAddToCartForm.submitLight = function(button, url){
+            if(this.validator) {
+                var nv = Validation.methods;
+                delete Validation.methods['required-entry'];
+                delete Validation.methods['validate-one-required'];
+                delete Validation.methods['validate-one-required-by-name'];
+                // Remove custom datetime validators
+                for (var methodName in Validation.methods) {
+                    if (methodName.match(/^validate-datetime-.*/i)) {
+                        delete Validation.methods[methodName];
+                    }
+                }
+
+                if (this.validator.validate()) {
+                    if (url) {
+                        this.form.action = url;
+                    }
+                    this.form.submit();
+                }
+                Object.extend(Validation.methods, nv);
+            }
+        }.bind(productAddToCartForm);
+    //]]>
+    </script>
+    </div>
+
+    <div class="product-collateral">
+<?php foreach ($this->getChildGroup('detailed_info', 'getChildHtml') as $alias => $html):?>
+        <div class="box-collateral <?php echo "box-{$alias}"?>">
+            <?php if ($title = $this->getChildData($alias, 'title')):?>
+            <h2><?php echo $this->escapeHtml($title); ?></h2>
+            <?php endif;?>
+            <?php echo $html; ?>
+        </div>
+<?php endforeach;?>
+        <?php echo $this->getChildHtml('upsell_products') ?>
+        <?php echo $this->getChildHtml('product_additional_data') ?>
+    </div>
+</div>
+
+<div>-->
+    
+  
+    
+    
+    
+    
+    
+    
+<div id="page" class="grid">
+
+<div class="bread-crum">
+  <div class="breadcrumbs"  >
+    <ul>
+        <?php  ?>
+        <?php 
+        $product = Mage::registry('current_product');
+        $categoryIds = $product->getCategoryIds();
+        $category = Mage::getModel('catalog/category')->load($categoryIds[0]);
+        //echo $catId;
+        //$category = Mage::getModel('catalog/category')->load('37'); 
+        ?>
+        <h2>
+    
+</h2>
+        
+     <li class="neckties">
+      <a class="active" title="" href="#"><? echo $category->getName();   ?></a>
+      <span><img src="<?php echo $this->getSkinUrl('images/next.png') ; ?>" alt="ALEXANDER OLCH" /> </span>
+     </li>
+      <li class="purple">
+      <a class="active" title="" href="#"><?php echo $_product->getAttributeText('color'); ?></a>
+      <span><img src="<?php echo $this->getSkinUrl('images/next.png') ; ?>" alt="ALEXANDER OLCH" /> </span>
+     </li>
+     <li class="cotton">
+     <a class="active" title="" href="#"><?php echo $_product->getAttributeText('material_season'); ?></a>  
+      <span><img src="<?php echo $this->getSkinUrl('images/next.png') ; ?>" alt="ALEXANDER OLCH" /> </span> 
+          </li>  
+           
+          
+          
+                           
+            </ul>
+</div>
+</div>
+    
+<div class="product">
+<div class="product-zoom">
+
+      <?php //echo $this->getChildHtml('media') ?>
+<div id="dhtmlgoodies_slideshow">
+	
+    
+    <div id="previewPane">
+		
+       
+		<span id="waitMessage"></span>
+		<div id="largeImageCaption"></div>
+        
+	</div>
+	 <span class="reviwes">MORE VIEWS</span>
+         
+         <?php $_images = Mage::getModel('catalog/product')->load($_product->getId())->getMediaGalleryImages(); ?>
+
+<?php 
+$i=0; 
+foreach($_images as $_image){ 
+    $i++; 
+    //$imgSrc = $this->helper('catalog/image')->init($_product, 'thumbnail', $_image->getFile())->resize(108,90);
+    $imgSrc = $this->helper('catalog/image')->init($_product, 'small_size', $_image->getFile())->resize(108,90);
+    $altTxt = $this->htmlEscape($_image->getLabel());
+    $cuTitle = $this->htmlEscape($_image->getLabel());
+    
+    //$imgSrc2 = $this->helper('catalog/image')->init($_product, 'image');
+    //echo $imgSrc; echo '<br>';
+     //echo $imgSrc2; echo '<br><br>';
+ ?>  
+
+                            
+<a href="#" onClick="showPreview('<?php echo $imgSrc; ?>','<?php echo $i; ?>');return false"><img src="<?php echo $imgSrc; ?>" alt="tye"></a><?php } ?>
+
+         
+</div>
+</div>
+<div class="product-cont">
+<form action="<?php echo $this->getAddToCartUrl($_product) ?>" method="POST">        
+<h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+<span class="cost"><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></span>
+<span class="cost"><?php echo $this->getChildChildHtml('container1', '', true, true) ?></span>
+<span class="cost"><?php //echo $this->getChildChildHtml('container2', '', true, true) ?></span>
+<h1 class="cost-pay"><?php echo trim(strip_tags($this->getPriceHtml($_product, true))); ?></h1>
+<div class="sort-container">
+ <ul class="sort-product">
+    <li class="size"><a href="#">SIZE<br><span>SMALL</span></a> </li>     
+    <li class="size"><?php //print $_product->getHandkeysize(); ?></li>
+    </ul>
+    
+    
+
+    <div class="qty">
+<label for="Email-Address">QTY</label>
+<input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="username" />
+
+</div>
+</div>
+<div class="checkout">    
+    
+    
+    
+<?php if($_product->isSaleable()): ?>
+     <!-- <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')">
+          <span><span><?php echo $this->__('Add to Cart') ?></span></span></button>-->
+    <input name="" type="submit" value="ADD TO CART" >
+    
+    
+</form>    
+    
+<?php else: ?>
+<p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+<?php endif; ?>
+                            
+</div>
+<div class="mailing">
+<h6><a href="#">share on</a></h6>
+</div>
+<div class="footer-social-icons">
+<a class="facebook" href="#"></a>
+<a class="twitter" href="#"></a>
+<a class="p-icon" href="#"></a>
+<a class="t-icon" href="#"></a>
+<a class="mess-icon" href="#"></a>
+</div>
+<div class="mailing">
+<h6 class="add-to-list"><a href="#">ADD TO LIST</a></h6>
+</div>
+</div>
+</div>
+        
+        
+<div class="related-items">
+<div class="border"></div>
+<h3><a href="#">RELATED ITEMS</a></h3>
+<div class="border-right"></div>
+<div id="example">
+
+<div id="slides">
+<?php $_images = Mage::getModel('catalog/product')->load($_product->getId())->getMediaGalleryImages(); ?>
+<?php/* if($_images){?>            
+                  <?php $i=0; foreach($_images as $_image){ $i++; ?>
+                  <img src="<?php echo $this->helper('catalog/image')->init($_product, 'thumbnail', $_image->getFile())->resize(108,90); ?>" alt="<?php echo $this->htmlEscape($_image->getLabel());?>" title="<?php $this->htmlEscape($_image->getLabel());?>" />
+                  <?php } ?>
+<?php } */?>
+        
+<a href="#" class="prev"><img src="<?php echo $this->getSkinUrl('images/left-arrow.png') ; ?>" alt="Arrow Prev"></a>
+<div class="slides_container">
+    
+ <?php 
+$i=0; 
+foreach($_images as $_image){ 
+    $i++; 
+    $imgSrc = $this->helper('catalog/image')->init($_product, 'thumbnail', $_image->getFile())->resize(108,90);
+    $altTxt = $this->htmlEscape($_image->getLabel());
+    $cuTitle = $this->htmlEscape($_image->getLabel());
+ ?>   
+<div class="slide">
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item1.png') ; ?>" alt="item1"></a>
+
+<img src="<?php echo  $imgSrc; ?>" alt="<?php echo $altTxt; ?>" title="<?php echo $cuTitle; ?>" />
+
+</div>
+    <?php } ?>
+<div class="slide">
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item1.png') ; ?>" alt="item1"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item2.png') ; ?>" alt="item2"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item3.png') ; ?>" alt="item3"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item4.png') ; ?>" alt="item4"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item5.png') ; ?>" alt="item5"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item6.png') ; ?>" alt="item6"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item7.png') ; ?>" alt="item7"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item8.png') ; ?>" alt="item8"></a>
+</div>
+    
+<div class="slide">
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item1.png') ; ?>" alt="item1"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item2.png') ; ?>" alt="item2"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item3.png') ; ?>" alt="item3"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item4.png') ; ?>" alt="item4"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item5.png') ; ?>" alt="item5"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item6.png') ; ?>" alt="item6"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item7.png') ; ?>" alt="item7"></a>
+<a href="#" title="" ><img src="<?php echo $this->getSkinUrl('images/item8.png') ; ?>" alt="item8"></a>
+</div>
+
+
+</div>
+
+
+<a href="#" class="next"><img src="<?php echo $this->getSkinUrl('images/right-arrow.png') ; ?>" alt="Arrow Next"></a>
+
+</div>
+    
+    
+</div>
+</div>
+</div>

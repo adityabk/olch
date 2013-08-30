@@ -1,0 +1,27 @@
+<?php 
+echo '<script type="text/javascript" src="'.$this->getSkinUrl('js/mygento/seadragon-min.js').'"></script>';
+echo '<link rel="stylesheet" type="text/css" href="'.$this->getSkinUrl('css/mygento/deepzoom.css').'" media="all" />';
+?>
+<div id="deepzoom_gallery">
+	<?php
+	$gallery=Mage::getModel('mygento_deepzoom/gallery');
+	$collection=$gallery->prepareJs();
+	$auto=$gallery->AutoRotate();
+	?>
+	<script type="text/javascript">
+		<?php echo $auto;?>
+		var gallery = <?php echo $collection;?>
+		max= gallery.length;
+		maxx=max-1;
+		Seadragon.Config.imagePath="<?php echo $this->getSkinUrl('images/mygento/deepzoom/')?>";
+	</script>
+	<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/mygento/deepzoom-gallery.js');?>"></script>
+	<?php if($gallery->show_next_last()){ ?>
+	<a href="#" class="gallery-prev" onclick="switchTo(event,'prev');">Prev</a>
+	<?php } ?>
+	<div id="gallery_container"></div>
+	<?php if($gallery->show_next_last()){ ?>
+	<a href="#" class="gallery-next" onclick="switchTo(event,'next');">Next</a>
+	<?php } ?>	
+</div>
+<div class="clear"></div>

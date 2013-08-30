@@ -1,0 +1,350 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+
+<?php
+//$attributeCode = 'color';
+
+function getAttribute($attributeCode){
+$product = Mage::getModel('catalog/product');
+
+$productCollection = Mage::getResourceModel('eav/entity_attribute_collection')
+   ->setEntityTypeFilter($product->getResource()->getTypeId())
+   ->addFieldToFilter('attribute_code', $attributeCode);
+
+$attribute = $productCollection->getFirstItem()->setEntity($product->getResource());
+//print_r($attribute->getData()); // print out the available attributes
+
+$options = $attribute->getSource()->getAllOptions(false);// print out attribute options
+return $options;
+}
+
+$materialOptions = getAttribute('material_season');
+$colorOptions = getAttribute('color');
+//echo '<pre>'; print_r($colorOptions); print_r($materialOptions); echo '</pre>';
+
+/*foreach($colorOptions as $key=>$valArr){
+        $colorkey = $valArr['value'];
+        $color = $valArr['label'];
+        echo $colorkey.'-'.$color.'<br>';
+}
+
+foreach($materialOptions as $key=>$valArr){
+        $matkey = $valArr['value'];
+        $material = $valArr['label'];
+        echo $matkey.'-'.$material.'<br>';
+}*/
+
+$product = Mage::getModel('catalog/product');
+$helper     = Mage::helper('catalog/category');
+$collection = $helper->getStoreCategories('name', true, false);
+//$collection->setOrder( 'position', asc );
+
+    //$array      = $helper->getStoreCategories('name', false, false);
+?>
+
+<script type="text/javascript">
+//<![CDATA[
+    var contactForm = new VarienForm('contactForm', true);
+//]]>
+</script>
+
+<script>
+    
+jQuery(document).ready(function($) {
+	$.fn.scrollPagination = function(options) {		
+		var settings = { 
+			nop     : 4, // The number of posts per scroll to be loaded
+			offset  : 0, // Initial offset, begins at 0 in this case
+			error   : 'No More Products!', // When the user reaches the end this is the message that is
+			                            // displayed. You can change this if you want.
+			delay   : 500, // When you scroll down the posts will load after a delayed amount of time.
+// This is mainly for usability concerns. You can alter this as you see fit
+			scroll  : true // The main bit, if set to false posts will not load as the user scrolls. 
+			               // but will still load if the user clicks.
+		}
+		
+		// Extend the options so they work with the plugin
+		if(options) {
+			$.extend(settings, options);
+		}
+		
+		// For each so that we keep chainability.
+		return this.each(function() {		
+			
+			// Some variables 
+			$this = $(this);
+			$settings = settings;
+			var offset = $settings.offset;
+			var busy = false; // Checks if the scroll action is happening 
+			                  // so we don't run it multiple times
+			
+			// Custom messages based on settings
+			if($settings.scroll == true){
+                            $initmessage = '';//Scroll for more or click here';
+                        }else{
+                            $initmessage = 'Click for more';
+                        }
+			// Append custom messages and extra UI
+			$this.append('<div class="content"></div><div class="loading-bar">'+$initmessage+'</div>');
+			
+			function getData() {
+var hdnproduct = document.getElementById('hdnproduct').value;
+var hdncolor = document.getElementById('hdncolor').value;
+var hdnmatses = document.getElementById('hdnmatses').value;
+var hdnprodperpage = document.getElementById('hdnprodperpage').value;
+var hdnpgno = document.getElementById('hdnpgno').value;
+
+var params = "product="+hdnproduct+"&color="+hdncolor+"&matses="+hdnmatses+"&hdnppp="+hdnprodperpage+"&hdnpgno="+hdnpgno;
+/*if(offset > 16){
+    setnop = 4;    
+}else{
+    setnop = $settings.nop;    
+}*/
+
+var url = "<?php echo $this->getUrl('catalog/product/sortajax'); ?>";
+				// Post data to ajax.php
+				$.post(url, {
+						
+				    action        : 'scrollpagination',
+                                    parameters    : params,
+				    number        : $settings.nop,
+				    offset        : offset
+					    
+				}, function(data) {
+						
+					// Change loading bar content (it may have been altered)
+					$this.find('.loading-bar').html($initmessage);
+						
+					// If there is no data returned, there are no more posts to be shown. Show error
+					if(data == "") { 
+						$this.find('.loading-bar').html($settings.error);	
+					}
+					else {
+						
+						// Offset increases
+					    offset = offset+$settings.nop; 
+						    
+						// Append the data to the content div
+                                                //$this.find('.content').append(data);
+
+var mydatArr = data.split("|");
+if(mydatArr[1] != '0'){
+$this.find('.content').append(mydatArr[0]);
+document.getElementById('cntby').innerHTML = mydatArr[2];
+busy = false;
+}else{
+    //$this.find('.content').append($settings.error);
+    //busy = true;
+    
+    //var html = '<div>'+$settings.error+'</div>';
+    
+    //$this.find('.content').append(html);
+    $this.find('.loading-bar').html($settings.error);
+    busy = true;
+}
+						// No longer busy!	
+						//busy = false;
+					}	
+						
+				});
+					
+			}	
+			
+			getData(); // Run function initially
+			
+			// If scrolling is enabled
+			if($settings.scroll == true) {
+				// .. and the user is scrolling
+				$(window).scroll(function() {
+					
+					// Check the user is at the bottom of the element
+					if($(window).scrollTop() + $(window).height() > $this.height() && !busy) {
+						
+						// Now we are working, so busy is true
+						busy = true;
+						
+						// Tell the user we're loading posts
+						$this.find('.loading-bar').html('<img src="<?php echo $this->getSkinUrl('images/ajax-loader.gif') ; ?>">');
+						
+						// Run the function to fetch the data inside a delay
+						// This is useful if you have content in a footer you
+						// want the user to see.
+						setTimeout(function() {
+							
+							getData();
+							
+						}, $settings.delay);
+							
+					}	
+				});
+			}
+			
+			// Also content can be loaded by clicking the loading bar/
+			$this.find('.loading-bar').click(function() {
+			
+				if(busy == false) {
+					busy = true;
+					getData();
+				}
+			
+			});
+			
+		});
+	}
+
+});
+
+
+
+/*jQuery(document).ready(function() { //alert('here');
+	jQuery('#content').scrollPagination({  
+	nop     : 4, // The number of posts per scroll to be loaded
+	offset  : 0, // Initial offset, begins at 0 in this case
+	error   : 'No More Products!', // When the user reaches the end this is the message that is
+		                            // displayed. You can change this if you want.
+	delay   : 500, // When you scroll down the posts will load after a delayed amount of time.
+		               // This is mainly for usability concerns. You can alter this as you see fit
+	scroll  : true // The main bit, if set to false posts will not load as the user scrolls. 
+		               // but will still load if the user clicks.
+		
+	});
+	
+});*/
+
+
+
+function myajaxsort(){     
+    document.getElementById('content').innerHTML = '';
+    jQuery(document).ready(function() { 
+	jQuery('#content').scrollPagination({  
+	nop     : 4, // The number of posts per scroll to be loaded
+	offset  : 0, // Initial offset, begins at 0 in this case
+	error   : '<span>No More Products!<span>', // When the user reaches the end this is the message that is
+		                            // displayed. You can change this if you want.
+	delay   : 500, // When you scroll down the posts will load after a delayed amount of time.
+		               // This is mainly for usability concerns. You can alter this as you see fit
+	scroll  : true // The main bit, if set to false posts will not load as the user scrolls. 
+		               // but will still load if the user clicks.
+		
+	});
+	
+    });
+}
+
+jQuery(document).ready(function() {
+myajaxsort();
+
+ 
+
+ jQuery('#cntby').click = function (){
+    //jQuery(document).scrollTo('#content');
+    jQuery(window).scrollTop(jQuery('#content').offset().top);
+ } 
+
+
+
+});
+</script>
+
+<h1>SORT BY</h1>
+<div id="sortby-opts" style="display:none;">
+<ul class="sort"></ul>
+</div>
+
+<div class="grey demo-container">
+<ul class="accordion"  id="accordion-2">
+<li><a href="#">Product</a>
+    <ul class="acc-inner-ul">        
+<?php
+foreach ($collection as $cat):
+    $categoryId = $cat->getEntityId();
+    $catName = $cat->getName();
+    $pCnt = Mage::getModel('catalog/category')->load($categoryId)->getProductCount();
+    
+    //echo '<li><a href="#">'.$categoryId.'-'.$catName.'('.$mycnt.')</a></li>';
+?>        
+        <li><span onclick= "return sortpanel('<?php echo $categoryId.'|'.$pCnt.'|'.$catName.'|product';?>');"><?php echo $catName; ?></span></li>
+<?php endforeach; ?>
+    </ul>
+</li>
+    
+<li><a href="#">Color</a>
+    <ul class="acc-inner-ul">        
+<?php        
+foreach($colorOptions as $key=>$valArr){
+        $colorkey = $valArr['value'];
+        $color = $valArr['label'];
+        
+        $_productCollection = Mage::getModel('catalog/product')->getCollection()
+          ->addAttributeToSelect('*')
+          ->addAttributeToFilter('visibility', 4)
+          ->addAttributeToFilter('status', 1)
+            ->addAttributeToFilter('color', $colorkey)
+          ->load();
+        
+        $pCnt = $_productCollection->count();
+?>        
+        <li><span onclick= "return sortpanel('<?php echo $colorkey.'|'.$pCnt.'|'.$color.'|color';?>');"><?php echo $color;?></span></li>
+<?php  } ?>        
+    </ul>
+</li>
+    
+<li><a href="#">Material / Season</a>
+    <ul class="acc-inner-ul">
+<?php        
+foreach($materialOptions as $key=>$valArr){
+        $matkey = $valArr['value'];
+        $material = $valArr['label'];
+        
+        $_productCollection = Mage::getModel('catalog/product')->getCollection()
+          ->addAttributeToSelect('*')
+          ->addAttributeToFilter('visibility', 4)
+          ->addAttributeToFilter('status', 1)
+            ->addAttributeToFilter('material_season', $matkey)
+          ->load();        
+        $pCnt = $_productCollection->count();
+?>        
+        <li><span onclick= "return sortpanel('<?php echo $matkey.'|'.$pCnt.'|'.$material.'|matses';?>');"><?php echo $material; ?></span></li>
+<?php } ?>        
+    </ul>
+</li>
+
+</ul>
+    <input type="hidden" name="hdnproduct" id="hdnproduct" value="0">
+    <input type="hidden" name="hdncolor" id="hdncolor" value="0">
+    <input type="hidden" name="hdnmatses" id="hdnmatses" value="0">
+    <input type="hidden" name="hdnprodperpage" id="hdnprodperpage" value="16">
+    <input type="hidden" name="hdnpgno" id="hdnpgno" value="0">
+
+</div>  

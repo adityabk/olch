@@ -1,0 +1,130 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+
+<?php
+function allowedAttributes($commaStr){
+    $idArr = explode(',',$commaStr);
+    $idArr = array_unique($idArr);
+    $arr1 = array();
+    $arr2 = array();
+    for($i=0;$i<count($idArr);$i++){
+        $arr3 = array();
+        array_push($arr3,$idArr[$i]);        
+        $arr2['finset']=$arr3;
+        array_push($arr1,$arr2);
+    }    
+    return $arr1; 
+} 
+
+$_productCollection = Mage::getModel('catalog/product')->getCollection()
+          ->addAttributeToSelect('*')
+          ->addAttributeToFilter('visibility', 4)
+          ->addAttributeToFilter('status', 1);
+//$_productCollection->addAttributeToFilter('color',$allowedcolors);
+//$_productCollection->getSelect()->limit( 4,72 );
+$_productCollection->getSelect()->limit( 16 );
+
+          $_productCollection->load();
+    
+   $_helper = $this->helper('catalog/output');
+    //include('test.php');
+?>
+    <?php $_collectionSize = $_productCollection->count() ?>
+    <?php $_columnCount = $this->getColumnCount(); ?>
+<?php if(!$_productCollection->count()): ?>
+<p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+<?php else: ?>
+
+<script>
+function prodmouseover() {
+    jQuery("li[id^=block_]").hover( function () {       
+        jQuery(this).children('.on-mouse-right').fadeIn('fast');
+	jQuery(this).children('.on-mouse-left').fadeIn('fast');
+    }, function () {    
+        jQuery(this).children('.on-mouse-right').fadeOut('fast');
+	jQuery(this).children('.on-mouse-left').fadeOut('fast');
+    });
+    
+    
+    jQuery(".on-mouse-right").hover( function () {       
+        jQuery(this).fadeOut('fast');	
+    });
+     
+    jQuery(".on-mouse-left").hover( function () {       
+        jQuery(this).fadeOut('fast');	
+    });
+	
+}
+
+
+</script>
+
+<?php //echo '<pre>'; print_r($_POST); echo '</pre>'; ?>
+
+
+<div class="category-products" id="content">
+    <ul class="product-catalog"></ul>
+</div>
+
+<div id="myid"></div>
+<div id="cntby" onclick="gotop();"></div>
+
+<?php endif; ?>
+
+<?php //$_productCollection->printlogquery(true); ?>
+
+
+</div>
+</div>
+
+<?php /* ?>
+<div class="content-bottom">
+    
+<div class="product-bg">&nbsp;</div>
+
+<div class="page-list">
+    
+<?php echo $pagination;  ?>
+</div>
+
+
+</div><?php */ ?>
+
+
+
+
+
+
+</div>
+</div>

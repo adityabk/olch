@@ -1,0 +1,325 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * @var Mage_Page_Block_Html_Header $this
+ */
+/*?>
+<div class="header-container">
+    <div class="header">
+        <?php if ($this->getIsHomePage()):?>
+        <h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
+        <?php else:?>
+        <a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a>
+        <?php endif?>
+        <div class="quick-access">
+            <?php echo $this->getChildHtml('topSearch') ?>
+            <p class="welcome-msg"><?php echo $this->getWelcome() ?> <?php echo $this->getAdditionalHtml() ?></p>
+            <?php echo $this->getChildHtml('topLinks') ?>
+            <?php echo $this->getChildHtml('store_language') ?>
+        </div>
+        <?php echo $this->getChildHtml('topContainer'); ?>
+    </div>
+</div>
+<?php echo $this->getChildHtml('topMenu') */?>
+
+
+
+<script>
+jQuery.noConflict();
+jQuery(window).scroll(function () {
+jQuery("#top-container").show().fadeIn("slow");
+jQuery("#logo").hide();
+
+//$el = jquery('.middle-container'); 
+  if (jQuery(this).scrollTop() == 0 && jQuery('.middle-container').css('position') != 'fixed'){
+    jQuery("#top-container").hide();
+    jQuery("#logo").show().fadeIn("slow");
+     jQuery("#tophead").css("position", "relative");
+  } 
+  else{
+   jQuery("#tophead").css("position", "fixed");
+  }
+
+});
+
+
+
+</script>
+<div class="module-header" id="module-header">
+<div id="head" class="grid" role="banner">
+    <div class="middle-container">
+  <div id="tophead" class="grid-12">
+  <div id="newsletter">
+  <ul>
+  <li><a href="<?php echo $this->getUrl() ?>" target="_parent" >SHOP</a></li>
+  <li>BLOG</li>
+  
+  <!--<li><?php if (! Mage::getSingleton('customer/session')->isLoggedIn()): ?>
+<a href="<?php echo Mage::helper('customer')->getLoginUrl(); ?>"><?php echo $this->__('LOGIN') ?></a>
+<?php else: ?>
+<a href="<?php echo Mage::helper('customer')->getLogoutUrl(); ?>"><?php echo $this->__('LOGOUT') ?></a>
+<?php endif; ?></li> -->
+  </ul>
+  
+  </div>
+  <nav id="account" class="sm-caps" role="navigation">
+    <ul class="links">
+      <li class="first" >
+          
+          
+<?php
+$totalItems = Mage::getModel('checkout/cart')->getQuote()->getItemsCount();
+$totalQuantity = Mage::getModel('checkout/cart')->getQuote()->getItemsQty();
+$subTotal = Mage::getModel('checkout/cart')->getQuote()->getSubtotal();
+$grandTotal = Mage::helper('checkout')->formatPrice(Mage::getModel('checkout/cart')->getQuote()->getGrandTotal());
+
+if($totalItems < 1){$totalItems = 0;}
+?>
+          
+         
+          <a href="#" id="btn-shopping-bag-0" class="top-link-cart active">Shopping Bag [<?php echo $totalItems; ?>] </a>
+<?php
+               //echo $this->getChildHtml('topcart'); 
+          ?>
+                    <aside id="minicart" class="grid-14 omega">
+                        
+                        <div class="shopping-items">
+                        <div class="total-times">
+
+                        <div class="sub-total"></div>
+                        <div class="selected-products">
+<script type="text/javascript">
+    function delfun(pId){
+        alert(pid);
+        
+    }
+</script>
+<?php
+
+$items = Mage::getSingleton('checkout/session')->getQuote()->getAllItems(); 
+                         
+foreach($items as $item) :
+    $image =    Mage::helper('catalog/image')->init($item->getProduct(), 'thumbnail')->resize(56, 56);
+   // echo '<pre>'; print_r($item); echo '</pre>';
+    $pId = $item->getProductId();
+    $pName = $item->getName();
+    $pSKU = $item->getSku();
+    $pQty = $item->getQty();
+    
+    
+    
+    $pPrice = Mage::helper('checkout')->formatPrice($item->getPrice());    
+    
+    $_product = Mage::getModel('catalog/product')->load($pId);
+    if($_product->getStatus()==1){
+    $_categories = $_product->getCategoryIds();
+   $_category = Mage::getModel('catalog/category')->load($_categories[0]);
+   $url = $this->getUrl($_category->getUrlPath()).$_product->getUrlPath();
+    }
+   
+    $delUrl = Mage::getUrl( 'checkout/cart/delete', array( 'id' => $item->getId() ) );
+?>    
+<div class="s-product">
+                        <div class="item-img"><img src="<?php echo $image; ?>"  alt="<?php echo $pName; ?>"></div>
+                        <div class="item-des">
+                        <div class="item-name"><?php echo $pName; ?><br>
+                    <span class="small">QTY <?php echo $pQty; ?> </span>
+                    <span class="small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $pPrice; ?> </span> </div>
+
+                    </div>
+                        <div class="item-close"><img src="<?php echo $this->getSkinUrl('images/close-img.jpg') ; ?>" width="7" height="7" alt="close"></div>
+                        </div>
+ <?php endforeach; ?>
+  <input type="hidden" name="pid" id="pid" value="">                        
+                            
+     </div>
+                        <div class="checkout">
+<form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">                 
+<?php
+/*echo $_SERVER['SCRIPT_URL'];
+if($_SERVER['SCRIPT_URL'] == '/tumblrheader'){ 
+?>    
+    <a href="http://olchcom.nextmp.net/checkout/cart/" target="_parent">CHECKOUT</a>
+<?php }else{ */?>
+<input name="" type="submit" value="Checkout"   >
+<?php //} ?>
+
+</form>                        
+                        <span class="small-1">TOTAL </span><br><span class="small-1"><?php echo $grandTotal; ?></span></div>
+                        </div>
+                        </div>                       
+                        
+
+                      </aside>    
+
+       
+          
+         <!-- <aside id="minicart" class="grid-14 omega">
+   
+    <div class="shopping-items">
+    <div class="total-times">
+  
+    <div class="sub-total">
+    
+    </div>
+    <div class="selected-products">
+    <div class="s-product">
+    <div class="item-img"><img src="<?php echo $this->getSkinUrl('images/s-img.jpg') ; ?>" width="56" height="56" alt="s-img"></div>
+    <div class="item-des">
+    <div class="item-name">The MARGINAL WAY<br>
+<span class="small">QTY1 </span><span class="small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$140.00</span></div>
+
+</div>
+    <div class="item-close"><img src="<?php echo $this->getSkinUrl('images/close-img.jpg') ; ?>" width="7" height="7" alt="close"></div>
+    </div>
+    <div class="s-product last">
+    <div class="item-img"><img src="<?php echo $this->getSkinUrl('images/s-img.jpg') ; ?>" width="56" height="56" alt="s-img"></div>
+    <div class="item-des">
+    <div class="item-name">The MARGINAL WAY<br>
+<span class="small">QTY1 </span><span class="small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$140.00</span></div>
+
+</div>
+    <div class="item-close"><img src="<?php echo $this->getSkinUrl('images/close-img.jpg') ; ?>" width="7" height="7" alt="close"></div>
+    </div>
+ 
+    
+    </div>
+    <div class="checkout">
+    <input name="" type="submit" value="Checkout">
+    <span class="small-1">TOTAL </span><br><span class="small-1">$280.00</span></div>
+    </div>
+    </div>
+  </aside>-->
+          
+      </li>
+      <li class="third"> <a href="#" id="contact-0" target="_parent" >CONTACT </a></li>
+      <li class="second"> 
+
+  
+          
+          <?php if (! Mage::getSingleton('customer/session')->isLoggedIn()): ?>
+          
+<?php
+  //echo $_SERVER['SCRIPT_URL'];
+if($_SERVER['SCRIPT_URL'] == '/tumblrheader'){
+?>
+          <a href="<?php echo Mage::helper('customer')->getLoginUrl(); ?>" target="_parent" id="btn-log-in"><?php echo $this->__('LOGIN') ?></a>
+<?php          
+}else{
+   
+?>
+          
+<a href="<?php echo Mage::helper('customer')->getLoginUrl(); ?>"  target="_parent" id="btn-log-in"><?php echo $this->__('LOGIN') ?></a>
+<!--<a href="#" id="btn-log-in" >LogIn</a>-->
+                    <aside id="minilogin" class="grid-14 omega">
+                        
+<?php echo $this->getChildHtml('mini_login') ?>
+                        
+                        <!--<div class="login-section">
+                        <ul class="login-list">
+                        <li>
+                        <input name="" type="text" placeholder="EMAIL ADDRESS">
+                        </li>
+                         <li>
+                        <input name="" type="text" placeholder="PASSWORD">
+                        </li>
+                        <li>
+                        <input name="" type="submit" value="LOGIN"> <span class="fotgot-pas">LOGIN HELP</span>
+                        </li>
+                        </ul>
+                        </div>-->
+
+<!--
+                        <div class="signup-section">
+                        <h3>Sign Up for an Account</h3>
+                        <ul class="login-list">
+                        <li>
+                        <label>&nbsp;</label><span class="right-txt">Checkout faster</span>
+                        </li>
+                         <li>
+                        <label>&nbsp;</label><span class="right-txt">Send Presents</span>
+                        </li>
+                         <li>
+                        <label>&nbsp;</label><span class="right-txt">Get first look at new arrivals</span>
+                        </li>
+                        <li>
+                        <label>&nbsp;</label><span class="right-txt">Custom recommendations</span>
+                        </li>
+                        <li>
+                        <label>&nbsp;</label><input name="" type="submit" value="Sing Up">
+                        </li>
+                        </ul>
+                        </div> -->
+                      </aside>
+<?php } ?>
+<?php else: ?>
+<a href="<?php echo Mage::helper('customer')->getLogoutUrl(); ?>" target="_parent" id="btn-log-out"><?php echo $this->__('LOGOUT') ?></a>
+<?php endif; ?>
+
+      </li>
+    </ul>
+  </nav>
+  
+
+  </div>
+    
+  <hgroup id="logo" class="grid-12">
+    <h1> <a href="<?php echo $this->getUrl() ?>"><img src="<?php echo $this->getSkinUrl('images/logo.jpg') ; ?>" alt="ALEXANDER OLCH" target="_parent" /> </a></h1>
+  </hgroup>
+  <div id="headbtm" class="grid-12">
+  
+  <form id="search-form" action="%20" method="get">
+    <input id="search" type="text" name="q" value="" class="short right" />
+    <div id="search_autocomplete" class="search-autocomplete"></div>
+    <script type="text/javascript"> 
+var searchForm = new Varien.searchForm('search-form', 'search', '');
+</script>
+  </form></div>
+</div>
+    </div>
+    
+    <div class="top-container" id="top-container" style="display:none">
+<div class="center-container">
+  
+  <hgroup id="logo" class="grid-12">
+    <h1> <a href="<?php echo $this->getUrl() ?>"><img src="<?php echo $this->getSkinUrl('images/logo-small.jpg') ; ?>" alt="ALEXANDER OLCH" /> </a></h1>
+  </hgroup>
+  <div id="headbtm" class="grid-12">
+  
+  <form id="search-form" action="%20" method="get">
+    <input id="search" type="text" name="q" value="" class="short right" />
+    <div id="search_autocomplete" class="search-autocomplete"></div>
+    <script type="text/javascript"> //<![CDATA[
+var searchForm = new Varien.searchForm('search-form', 'search', '');
+/* searchForm.initAutocomplete('http://makr.com/catalogsearch/ajax/suggest/', 'search_autocomplete'); */
+//]]> </script>
+  </form></div>
+</div>
+
+
+</div>
+    
+</div>
