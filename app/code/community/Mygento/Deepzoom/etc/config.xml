@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * Sea-Lab Ltd
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade to newer
+ * versions in the future.
+ *
+ * @category   Mygento
+ * @package    Mygento_Deepzoom
+ * @copyright  Copyright (c) 2012 Sea-Lab Ltd (http://www.mygento.net)
+ * @contacts   connect@mygento.net
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */ 
+ -->
+<config>
+    <modules>
+        <Mygento_Deepzoom>
+            <version>1.3.0</version>
+        </Mygento_Deepzoom>
+    </modules>
+
+	<global>
+		<models>
+			<mygento_deepzoom>
+				<class>Mygento_Deepzoom_Model</class>
+			</mygento_deepzoom>
+			<catalog>
+				<rewrite>
+					<product_attribute_backend_media>Mygento_Deepzoom_Model_Media</product_attribute_backend_media>
+				</rewrite>
+			</catalog>
+        </models>
+        <helpers>
+            <mygento_deepzoom>
+                <class>Mygento_Deepzoom_Helper</class>
+            </mygento_deepzoom>
+        </helpers>
+		<blocks>
+            <mygento_deepzoom>
+				<class>Mygento_Deepzoom_Block</class>
+			</mygento_deepzoom>
+        </blocks>
+        <!--
+<resources>
+            <mygento_deepzoom_setup>
+                <setup>
+                    <module>Mygento_Deepzoom</module>
+                    <class>Mygento_Deepzoom_Model_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </mygento_deepzoom_setup>
+            <mygento_deepzoom_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </mygento_deepzoom_write>
+            <mygento_deepzoom_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </mygento_deepzoom_read>
+        </resources>
+-->
+        
+    </global>
+	
+	<admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Mygento_Deepzoom before="Mage_Adminhtml">Mygento_Deepzoom_Adminhtml</Mygento_Deepzoom>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+		<acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <mygento_deepzoom translate="title" module="mygento_deepzoom">
+                                            <title>Mygento_Deepzoom Manager</title>
+                                            <sort_order>400</sort_order>
+                                        </mygento_deepzoom>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+		<layout>
+            <updates>
+                <mygento_deepzoom>
+                    <file>mygento/deepzoom.xml</file>
+                </mygento_deepzoom>
+            </updates>
+        </layout>
+		<translate>
+		   <modules>
+			   <Mygento_Deepzoom>
+				   <files>
+					  <default>Mygento_Deepzoom.csv</default>
+				   </files>
+			   </Mygento_Deepzoom>
+		   </modules>
+		</translate>
+    </adminhtml>
+    <frontend>
+        <layout>
+            <updates>
+                <mygento_deepzoom>
+                    <file>mygento/deepzoom.xml</file>
+                </mygento_deepzoom>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Mygento_Deepzoom>
+                    <files>
+                        <default>Mygento_Deepzoom.csv</default>
+                    </files>
+                </Mygento_Deepzoom>
+            </modules>
+        </translate>
+        <events>
+            <controller_action_layout_load_before>
+                <observers>
+                    <mygento_deepzoom_addHandle>
+                        <type>singleton</type>
+                        <class>mygento_deepzoom/observer</class>
+                        <method>beforeLoadLayout</method>
+                    </mygento_deepzoom_addHandle>
+                </observers>
+            </controller_action_layout_load_before>
+        </events>
+	</frontend>
+	<default>
+        <mygento_deepzoom>
+            <general>
+                <enabled>0</enabled>
+                <debug>0</debug>
+                <autogenerate>0</autogenerate>
+            </general>
+        </mygento_deepzoom>
+    </default>
+</config>
